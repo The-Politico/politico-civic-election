@@ -1,5 +1,7 @@
 import os
 
+import dj_database_url
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -17,6 +19,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'core',
+    'entity',
+    'geography',
+    'government',
     'election',
 ]
 
