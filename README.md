@@ -1,34 +1,27 @@
 ![POLITICO](https://rawgithub.com/The-Politico/src/master/images/logo/badge.png)
 
-# election
+# django-politico-civic-election
 
 ### Quickstart
 
 1. Install the app.
 
   ```
-  $ pip install election
+  $ pip install django-politico-civic-election
   ```
 
-2. Add the app to your Django project and configure settings.
+2. Add the app and its dependencies to your Django project.
 
   ```python
   INSTALLED_APPS = [
       # ...
       'rest_framework',
+      'core',
+      'entity',
+      'geography',
+      'government',
       'election',
   ]
-
-  #########################
-  # election settings
-
-  ELECTION_SECRET_KEY = ''
-  ELECTION_AWS_ACCESS_KEY_ID = ''
-  ELECTION_AWS_SECRET_ACCESS_KEY = ''
-  ELECTION_AWS_REGION = ''
-  ELECTION_AWS_S3_BUCKET = ''
-  ELECTION_CLOUDFRONT_ALTERNATE_DOMAIN = ''
-  ELECTION_S3_UPLOAD_ROOT = ''
   ```
 
 ### Developing
