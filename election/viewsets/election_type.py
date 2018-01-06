@@ -1,8 +1,9 @@
 from election.models import ElectionType
 from election.serializers import ElectionTypeSerializer
-from election.utils.api_auth import PermissionedViewSet
+
+from .base import BaseViewSet
 
 
-class ElectionTypeViewSet(PermissionedViewSet):
+class ElectionTypeViewSet(BaseViewSet):
     queryset = ElectionType.objects.all()
     serializer_class = ElectionTypeSerializer

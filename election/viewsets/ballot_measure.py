@@ -1,8 +1,9 @@
 from election.models import BallotMeasure
 from election.serializers import BallotMeasureSerializer
-from election.utils.api_auth import PermissionedViewSet
+
+from .base import BaseViewSet
 
 
-class BallotMeasureViewSet(PermissionedViewSet):
+class BallotMeasureViewSet(BaseViewSet):
     queryset = BallotMeasure.objects.all()
     serializer_class = BallotMeasureSerializer
