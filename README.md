@@ -2,6 +2,8 @@
 
 # django-politico-civic-election
 
+Create and manage election metadata, the POLITICO way.
+
 ### Quickstart
 
 1. Install the app.
@@ -16,36 +18,31 @@
   INSTALLED_APPS = [
       # ...
       'rest_framework',
-      'core',
       'entity',
       'geography',
       'government',
       'election',
   ]
+
+  #########################
+  # election settings
+
+  ELECTION_API_AUTHENTICATION_CLASS = 'rest_framework.authentication.BasicAuthentication' # default
+  ELECTION_API_PERMISSION_CLASS = 'rest_framework.permissions.IsAdminUser' # default
+  ELECTION_API_PAGINATION_CLASS = 'election.pagination.ResultsPagination' # default
   ```
+
 
 ### Developing
 
 ##### Running a development server
 
-Developing python files? Move into example directory and run the development server with pipenv.
+Move into the example directory, install dependencies and run the development server with pipenv.
 
   ```
   $ cd example
+  $ pipenv install
   $ pipenv run python manage.py runserver
-  ```
-
-Developing static assets? Move into the pluggable app's staticapp directory and start the node development server, which will automatically proxy Django's development server.
-
-  ```
-  $ cd election/staticapp
-  $ gulp
-  ```
-
-Want to not worry about it? Use the shortcut make command.
-
-  ```
-  $ make dev
   ```
 
 ##### Setting up a PostgreSQL database
@@ -56,7 +53,7 @@ Want to not worry about it? Use the shortcut make command.
   $ make database
   ```
 
-2. Add a connection URL to the `.env` file.
+2. Add a connection URL to `example/.env`.
 
   ```
   DATABASE_URL="postgres://localhost:5432/election"

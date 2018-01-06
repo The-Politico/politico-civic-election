@@ -19,7 +19,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'core',
     'entity',
     'geography',
     'government',
@@ -98,11 +97,3 @@ STATIC_URL = '/static/'
 
 #########################
 # election settings
-
-ELECTION_SECRET_KEY = ''
-ELECTION_AWS_ACCESS_KEY_ID = ''
-ELECTION_AWS_SECRET_ACCESS_KEY = ''
-ELECTION_AWS_REGION = ''
-ELECTION_AWS_S3_BUCKET = ''
-ELECTION_CLOUDFRONT_ALTERNATE_DOMAIN = ''
-ELECTION_S3_UPLOAD_ROOT = ''
