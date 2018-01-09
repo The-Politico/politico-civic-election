@@ -24,11 +24,14 @@ class Candidate(models.Model):
         Person, related_name='candidacies', on_delete=models.PROTECT)
     party = models.ForeignKey(
         Party, related_name='candidates', on_delete=models.PROTECT)
-    ap_candidate_id = models.CharField(max_length=255)
+    ap_candidate_id = models.CharField(max_length=255, null=True, blank=True)
     incumbent = models.BooleanField(default=False)
     top_of_ticket = models.ForeignKey(
         'self', null=True, blank=True, related_name='ticket',
         on_delete=models.SET_NULL)
+    prospective = models.BooleanField(
+        default=False,
+        help_text="The candidate has not yet declared her candidacy.")
 
     def save(self, *args, **kwargs):
         """
