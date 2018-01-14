@@ -1,16 +1,7 @@
 from django.contrib import admin
 from election.models import (Candidate, CandidateElection, Election,
                              ElectionCycle, ElectionDay, ElectionType, Race)
-
-
-class CandidateElectionInline(admin.StackedInline):
-    model = CandidateElection
-
-
-class ElectionAdmin(admin.ModelAdmin):
-    inlines = [
-        CandidateElectionInline
-    ]
+from .election import ElectionAdmin
 
 
 admin.site.register(Race)
