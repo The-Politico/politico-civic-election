@@ -21,7 +21,7 @@ setup(
     ],
     keywords='',
 
-    packages=find_packages(exclude=['docs', 'tests']),
+    packages=find_packages(exclude=['docs', 'tests', 'example']),
 
     install_requires=[
         'djangorestframework',
