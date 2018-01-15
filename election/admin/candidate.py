@@ -15,6 +15,8 @@ class PartyFilter(admin.SimpleListFilter):
         ]
 
     def queryset(self, request, queryset):
+        if not self.value():
+            return queryset
         return queryset.filter(party__ap_code=self.value())
 
 
@@ -29,6 +31,8 @@ class CycleFilter(admin.SimpleListFilter):
         ]
 
     def queryset(self, request, queryset):
+        if not self.value():
+            return queryset
         return queryset.filter(race__cycle__name=self.value())
 
 
