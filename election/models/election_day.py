@@ -22,7 +22,7 @@ class ElectionDay(models.Model):
         on_delete=models.PROTECT)
 
     def __str__(self):
-        return str(self.date)
+        return self.uid
 
     def save(self, *args, **kwargs):
         """

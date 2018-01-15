@@ -14,6 +14,9 @@ class ElectionCycle(models.Model):
     )
     name = models.CharField(max_length=4)
 
+    def __str__(self):
+        return self.uid
+
     def save(self, *args, **kwargs):
         """
         **uid**: :code:`cycle:{year}`

@@ -22,6 +22,9 @@ class ElectionType(models.Model):
     winning_threshold = models.DecimalField(
         decimal_places=3, max_digits=5, null=True, blank=True)
 
+    def __str__(self):
+        return self.uid
+
     def save(self, *args, **kwargs):
         """
         **uid**: :code:`electiontype:{name}`

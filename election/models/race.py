@@ -26,6 +26,9 @@ class Race(models.Model):
         'ElectionCycle', related_name='races', on_delete=models.PROTECT)
     special = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.uid
+
     def save(self, *args, **kwargs):
         """
         **uid**: :code:`{office.uid}_{cycle.uid}_race`

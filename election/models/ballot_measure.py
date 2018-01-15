@@ -22,6 +22,9 @@ class BallotMeasure(models.Model):
         'ElectionDay', related_name='ballot_measures',
         on_delete=models.PROTECT)
 
+    def __str__(self):
+        return self.uid
+
     def save(self, *args, **kwargs):
         """
         **uid**: :code:`division_cycle_ballotmeasure:{number}`

@@ -45,7 +45,7 @@ class Candidate(models.Model):
         super(Candidate, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.person.name
+        return self.uid
 
     def get_candidate_election(self, election):
         """Get a CandidateElection."""
