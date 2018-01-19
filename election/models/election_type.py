@@ -1,5 +1,4 @@
 from django.db import models
-from uuslug import slugify
 
 
 class ElectionType(models.Model):
@@ -12,6 +11,9 @@ class ElectionType(models.Model):
         editable=False,
         blank=True)
 
+    slug = models.SlugField(
+        blank=True, max_length=255, unique=True
+    )
     label = models.CharField(max_length=255, blank=True)
     short_label = models.CharField(max_length=50, null=True, blank=True)
 
@@ -29,5 +31,5 @@ class ElectionType(models.Model):
         """
         **uid**: :code:`electiontype:{name}`
         """
-        self.uid = 'electiontype:{}'.format(slugify(self.name))
+        self.uid = 'electiontype:{}'.format(self.slug)
         super(ElectionType, self).save(*args, **kwargs)
