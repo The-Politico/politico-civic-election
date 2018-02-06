@@ -5,6 +5,20 @@ class ElectionType(models.Model):
     """
     e.g., "General", "Primary"
     """
+    GENERAL = 'general'
+    PARTY_PRIMARY = 'party-primary'
+    JUNGLE_PRIMARY = 'jungle-primary'
+    PRIMARY_RUNOFF = 'primary-runoff'
+    GENERAL_RUNOFF = 'general-runoff'
+
+    TYPES = (
+        (GENERAL, 'General'),
+        (PARTY_PRIMARY, 'Party Primary'),
+        (JUNGLE_PRIMARY, 'Jungle Primary'),
+        (PRIMARY_RUNOFF, 'Primary Runoff'),
+        (GENERAL_RUNOFF, 'General Runoff')
+    )
+
     uid = models.CharField(
         max_length=500,
         primary_key=True,
@@ -12,14 +26,12 @@ class ElectionType(models.Model):
         blank=True)
 
     slug = models.SlugField(
-        blank=True, max_length=255, unique=True
+        blank=True, max_length=255, unique=True, choices=TYPES
     )
     label = models.CharField(max_length=255, blank=True)
     short_label = models.CharField(max_length=50, null=True, blank=True)
 
     ap_code = models.CharField(max_length=1)
-    is_general = models.BooleanField(default=False)
-    primary_type = models.CharField(max_length=50, null=True, blank=True)
     number_of_winners = models.PositiveSmallIntegerField(default=1)
     winning_threshold = models.DecimalField(
         decimal_places=3, max_digits=5, null=True, blank=True)
