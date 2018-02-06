@@ -31,7 +31,7 @@ class ElectionType(models.Model):
     label = models.CharField(max_length=255, blank=True)
     short_label = models.CharField(max_length=50, null=True, blank=True)
 
-    ap_code = models.CharField(max_length=1)
+    ap_code = models.CharField(max_length=1, null=True, blank=True)
     number_of_winners = models.PositiveSmallIntegerField(default=1)
     winning_threshold = models.DecimalField(
         decimal_places=3, max_digits=5, null=True, blank=True)
