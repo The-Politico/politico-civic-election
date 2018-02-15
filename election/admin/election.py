@@ -8,7 +8,7 @@ class CandidateElectionInline(admin.StackedInline):
 
 
 class ElectionAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['race']
+    autocomplete_fields = ['race', 'division']
     inlines = [
         CandidateElectionInline
     ]
