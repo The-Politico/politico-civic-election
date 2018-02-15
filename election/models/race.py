@@ -43,6 +43,14 @@ class Race(models.Model):
             self.office.label
         )
 
+        if self.special:
+            self.uid = '{}:special'.format(
+                self.uid
+            )
+            name_label = '{} Special'.format(
+                name_label
+            )
+
         self.label = name_label
         self.name = name_label
         if not self.slug:
