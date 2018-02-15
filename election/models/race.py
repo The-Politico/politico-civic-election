@@ -27,7 +27,7 @@ class Race(models.Model):
     special = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.uid
+        return self.label
 
     def save(self, *args, **kwargs):
         """
