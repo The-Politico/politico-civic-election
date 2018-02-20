@@ -45,3 +45,15 @@ class ElectionType(models.Model):
         """
         self.uid = 'electiontype:{}'.format(self.slug)
         super(ElectionType, self).save(*args, **kwargs)
+
+    def is_primary(self):
+        if self.slug in [self.PARTY_PRIMARY, self.JUNGLE_PRIMARY]:
+            return True
+        else:
+            return False
+
+    def is_runoff(self):
+        if self.slug in [self.PRIMARY_RUNOFF, self.GENERAL_RUNOFF]:
+            return True
+        else:
+            return False
