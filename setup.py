@@ -1,10 +1,10 @@
 from setuptools import find_packages, setup
 
 setup(
-    name='django-politico-civic-election',
-    version='0.0.0-alpha',
+    name='politico-civic-election',
+    version='0.1.0',
     description='',
-    url='https://github.com/The-Politico/django-politico-civic-election',
+    url='https://github.com/The-Politico/politico-civic-election',
     author='POLITICO interactive news',
     author_email='interactives@politico.com',
     license='MIT',
