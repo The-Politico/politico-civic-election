@@ -11,6 +11,7 @@ class ElectionAdmin(admin.ModelAdmin):
     list_display = (
         'race', 'election_date', 'division', 'party', 'get_election_type'
     )
+    ordering = ('election_day', 'division', 'party')
     autocomplete_fields = ['race', 'division']
     inlines = [
         CandidateElectionInline
