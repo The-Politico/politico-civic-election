@@ -29,16 +29,7 @@ class Election(models.Model):
         Division, related_name='elections', on_delete=models.PROTECT)
 
     def __str__(self):
-        base = '{0}, {1}, {2}'.format(
-            self.race.office.label,
-            self.election_type.label,
-            self.election_day.date
-        )
-
-        if self.party:
-            return '{0} {1}'.format(self.party.label, base)
-        else:
-            return base
+        return self.uid
 
     def save(self, *args, **kwargs):
         """
