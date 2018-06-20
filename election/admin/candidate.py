@@ -37,5 +37,32 @@ class CycleFilter(admin.SimpleListFilter):
 
 
 class CandidateAdmin(admin.ModelAdmin):
-    search_fields = ['person__full_name']
+    list_display = ('get_person', 'get_race', 'get_party')
+    search_fields = ('person__full_name', )
     list_filter = (PartyFilter, CycleFilter,)
+    readonly_fields = ('uid', )
+
+    fieldsets = (
+        ('Relationships', {
+            'fields': ('person', 'party', 'race', 'top_of_ticket')
+        }),
+        ('Identification', {
+            'fields': ('ap_candidate_id', 'incumbent', 'prospective')
+        }),
+        ('Record locators', {
+            'fields': ('uid', )
+        })
+    )
+
+    def get_person(self, obj):
+        return obj.person.full_name
+
+    def get_race(self, obj):
+        return obj.race.label
+
+    def get_party(self, obj):
+        return obj.party.label
+
+    get_person.short_description = 'Name'
+    get_race.short_description = 'Race'
+    get_party.short_description = 'Party'
