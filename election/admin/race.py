@@ -24,6 +24,19 @@ class RaceAdmin(admin.ModelAdmin):
     autocomplete_fields = ['office']
     search_fields = ['office__label', 'cycle__name', 'label']
     ordering = ('office__label', 'cycle__name')
+    readonly_fields = ('uid', 'slug')
+
+    fieldsets = (
+        ('Names and labeling', {
+            'fields': ('label', 'short_label', 'special')
+        }),
+        ('Relationships', {
+            'fields': ('office', 'cycle')
+        }),
+        ('Record locators', {
+            'fields': ('uid', 'slug')
+        })
+    )
 
     def get_office(self, obj):
         return obj.office.label
