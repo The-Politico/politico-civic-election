@@ -32,13 +32,13 @@ class ElectionAdmin(admin.ModelAdmin):
         'get_office',
         'election_date',
         'get_election_type',
-        'party',
+        'get_party',
         'special'
     )
     list_filter = ('election_day__date', 'election_type__label')
     ordering = (
-        'election_day',
-        'race__office__label',
+        'election_day__date',
+        'division__label',
         'party__label'
     )
     search_fields = ('race__office__label', 'election_day__slug')
@@ -67,8 +67,15 @@ class ElectionAdmin(admin.ModelAdmin):
     def get_election_type(self, obj):
         return obj.election_type.label
 
+    def get_party(self, obj):
+        if obj.party:
+            return obj.party.label
+        else:
+            return None
+
     def special(self, obj):
         return obj.race.special
 
     get_office.short_description = 'Office'
+    get_party.short_description = 'Primary Party'
     get_election_type.short_description = 'Election Type'
