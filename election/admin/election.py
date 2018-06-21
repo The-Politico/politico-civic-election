@@ -35,13 +35,21 @@ class ElectionAdmin(admin.ModelAdmin):
         'get_party',
         'special'
     )
-    list_filter = ('election_day__date', 'election_type__label')
+    list_filter = (
+        'election_day__date',
+        'race__special',
+        'election_type__label'
+    )
     ordering = (
         'election_day__date',
         'division__label',
         'party__label'
     )
-    search_fields = ('race__office__label', 'election_day__slug')
+    search_fields = (
+        'race__label',
+        'election_day__date',
+        'election_day__slug'
+    )
     autocomplete_fields = ['race', 'division']
     inlines = [
         CandidateElectionInline
