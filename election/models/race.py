@@ -19,6 +19,7 @@ class Race(models.Model):
 
     label = models.CharField(max_length=255, blank=True)
     short_label = models.CharField(max_length=50, null=True, blank=True)
+    description = models.TextField(blank=True, null=True)
 
     office = models.ForeignKey(
         Office, related_name='races', on_delete=models.PROTECT)
