@@ -9,42 +9,45 @@ class Election(models.Model):
     """
     A specific contest in a race held on a specific day.
     """
+
     uid = models.CharField(
-        max_length=500,
-        primary_key=True,
-        editable=False,
-        blank=True
+        max_length=500, primary_key=True, editable=False, blank=True
     )
     election_type = models.ForeignKey(
-        'ElectionType', related_name='elections', on_delete=models.PROTECT)
+        "ElectionType", related_name="elections", on_delete=models.PROTECT
+    )
     candidates = models.ManyToManyField(
-        'Candidate', through='CandidateElection')
+        "Candidate", through="CandidateElection"
+    )
     race = models.ForeignKey(
-        'Race', related_name='elections', on_delete=models.PROTECT)
+        "Race", related_name="elections", on_delete=models.PROTECT
+    )
     party = models.ForeignKey(
-        Party, null=True, blank=True, on_delete=models.PROTECT)
+        Party, null=True, blank=True, on_delete=models.PROTECT
+    )
     election_day = models.ForeignKey(
-        'ElectionDay', related_name='elections', on_delete=models.PROTECT)
+        "ElectionDay", related_name="elections", on_delete=models.PROTECT
+    )
     division = models.ForeignKey(
-        Division, related_name='elections', on_delete=models.PROTECT)
+        Division, related_name="elections", on_delete=models.PROTECT
+    )
 
     def __str__(self):
-        return self.uid
+        return self.race.office.label
 
     def save(self, *args, **kwargs):
         """
         **uid**: :code:`{race.uid}_election:{election_day}-{party}`
         """
         if self.party:
-            self.uid = '{}_election:{}-{}'.format(
+            self.uid = "{}_election:{}-{}".format(
                 self.race.uid,
                 self.election_day.date,
-                slugify(self.party.ap_code)
+                slugify(self.party.ap_code),
             )
         else:
-            self.uid = '{}_election:{}'.format(
-                self.race.uid,
-                self.election_day.date
+            self.uid = "{}_election:{}".format(
+                self.race.uid, self.election_day.date
             )
         super(Election, self).save(*args, **kwargs)
 
@@ -55,10 +58,7 @@ class Election(models.Model):
         candidate_election, c = CandidateElection.objects.update_or_create(
             candidate=candidate,
             election=self,
-            defaults={
-                'aggregable': aggregable,
-                'uncontested': uncontested
-            }
+            defaults={"aggregable": aggregable, "uncontested": uncontested},
         )
 
         return candidate_election
@@ -66,15 +66,12 @@ class Election(models.Model):
     def delete_candidate(self, candidate):
         """Delete a CandidateElection."""
         CandidateElection.objects.filter(
-            candidate=candidate,
-            election=self
+            candidate=candidate, election=self
         ).delete()
 
     def get_candidates(self):
         """Get all CandidateElections for this election."""
-        candidate_elections = CandidateElection.objects.filter(
-            election=self
-        )
+        candidate_elections = CandidateElection.objects.filter(election=self)
 
         return [ce.candidate for ce in candidate_elections]
 
@@ -83,20 +80,16 @@ class Election(models.Model):
         Get CandidateElections serialized into an object with
         party-slug keys.
         """
-        candidate_elections = CandidateElection.objects.filter(
-            election=self
-        )
+        candidate_elections = CandidateElection.objects.filter(election=self)
 
         return {
-            ce.candidate.party.slug: ce.candidate for ce
-            in candidate_elections
+            ce.candidate.party.slug: ce.candidate for ce in candidate_elections
         }
 
     def get_candidate_election(self, candidate):
         """Get CandidateElection for a Candidate in this election."""
         return CandidateElection.objects.get(
-            candidate=candidate,
-            election=self
+            candidate=candidate, election=self
         )
 
     def get_candidate_votes(self, candidate):
@@ -105,8 +98,7 @@ class Election(models.Model):
         this election.
         """
         candidate_election = CandidateElection.objects.get(
-            candidate=candidate,
-            election=self
+            candidate=candidate, election=self
         )
 
         return candidate_election.votes.all()
@@ -115,9 +107,7 @@ class Election(models.Model):
         """
         Get all votes for this election.
         """
-        candidate_elections = CandidateElection.objects.filter(
-            election=self
-        )
+        candidate_elections = CandidateElection.objects.filter(election=self)
 
         votes = None
         for ce in candidate_elections:
@@ -130,8 +120,7 @@ class Election(models.Model):
         Get all electoral votes for a candidate in this election.
         """
         candidate_election = CandidateElection.objects.get(
-            candidate=candidate,
-            election=self
+            candidate=candidate, election=self
         )
 
         return candidate_election.electoral_votes.all()
@@ -140,9 +129,7 @@ class Election(models.Model):
         """
         Get all electoral votes for all candidates in this election.
         """
-        candidate_elections = CandidateElection.objects.filter(
-            election=self
-        )
+        candidate_elections = CandidateElection.objects.filter(election=self)
 
         electoral_votes = None
         for ce in candidate_elections:
@@ -155,8 +142,7 @@ class Election(models.Model):
         Get all pledged delegates for a candidate in this election.
         """
         candidate_election = CandidateElection.objects.get(
-            candidate=candidate,
-            election=self
+            candidate=candidate, election=self
         )
 
         return candidate_election.delegates.all()
@@ -165,9 +151,7 @@ class Election(models.Model):
         """
         Get all pledged delegates for any candidate in this election.
         """
-        candidate_elections = CandidateElection.objects.filter(
-            election=self
-        )
+        candidate_elections = CandidateElection.objects.filter(election=self)
 
         delegates = None
         for ce in candidate_elections:
