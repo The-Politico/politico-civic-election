@@ -1,6 +1,6 @@
 ![POLITICO](https://rawgithub.com/The-Politico/src/master/images/logo/badge.png)
 
-# django-politico-civic-election
+# politico-civic-election
 
 Create and manage election metadata, the POLITICO way.
 
@@ -9,7 +9,7 @@ Create and manage election metadata, the POLITICO way.
 1. Install the app.
 
   ```
-  $ pip install django-politico-civic-election
+  $ pip install politico-civic-election
   ```
 
 2. Add the app and its dependencies to your Django project.
@@ -23,14 +23,17 @@ Create and manage election metadata, the POLITICO way.
       'government',
       'election',
   ]
+```
 
-  #########################
-  # election settings
+### Bootstrapping your database
 
-  ELECTION_API_AUTHENTICATION_CLASS = 'rest_framework.authentication.BasicAuthentication' # default
-  ELECTION_API_PERMISSION_CLASS = 'rest_framework.permissions.IsAdminUser' # default
-  ELECTION_API_PAGINATION_CLASS = 'election.pagination.ResultsPagination' # default
-  ```
+1. Ensure `PROPUBLICA_CONGRESS_API_KEY` is exported into your environment. If you don't have an API key for the ProPublica Congress API, you can request one [here](https://www.propublica.org/datastore/api/propublica-congress-api).
+
+2. Bootstrap the database.
+
+```
+$ python manage.py bootstrap_election
+```
 
 
 ### Developing
