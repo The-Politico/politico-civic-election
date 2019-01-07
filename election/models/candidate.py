@@ -48,9 +48,7 @@ class Candidate(models.Model):
         super(Candidate, self).save(*args, **kwargs)
 
     def __str__(self):
-        return "{} {} {}".format(
-            self.person.full_name, self.race.office.label, self.race.cycle.slug
-        )
+        return self.uid
 
     def get_candidate_election(self, election):
         """Get a CandidateElection."""
