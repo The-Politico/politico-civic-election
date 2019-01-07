@@ -49,7 +49,7 @@ class Candidate(models.Model):
 
     def __str__(self):
         return "{} {} {}".format(
-            self.person.full_name, self.office.label, self.cycle.slug
+            self.person.full_name, self.race.office.label, self.race.cycle.slug
         )
 
     def get_candidate_election(self, election):
