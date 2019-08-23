@@ -1,7 +1,7 @@
+# Imports from election.
 from election.models import ElectionDay
 from election.serializers import ElectionDaySerializer
-
-from .base import BaseViewSet
+from election.viewsets.base import BaseViewSet
 
 
 class ElectionDayViewSet(BaseViewSet):
