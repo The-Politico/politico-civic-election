@@ -1,10 +1,23 @@
-# flake8: noqa
-from .ballot_answer import BallotAnswerSerializer
-from .ballot_measure import BallotMeasureSerializer
-from .candidate import CandidateSerializer
-from .election_cycle import ElectionCycleSerializer
-from .election_day import ElectionDaySerializer
-from .election_event import ElectionEventSerializer
-from .election_type import ElectionTypeSerializer
-from .election import ElectionSerializer
-from .race import RaceSerializer
+# Imports from election.
+from election.serializers.ballot_answer import BallotAnswerSerializer
+from election.serializers.ballot_measure import BallotMeasureSerializer
+from election.serializers.candidate import CandidateSerializer
+from election.serializers.election_cycle import ElectionCycleSerializer
+from election.serializers.election_day import ElectionDaySerializer
+from election.serializers.election_event import ElectionEventSerializer
+from election.serializers.election import ElectionSerializer
+from election.serializers.election_type import ElectionTypeSerializer
+from election.serializers.race import RaceSerializer
+
+
+__all__ = [
+    "BallotAnswerSerializer",
+    "BallotMeasureSerializer",
+    "CandidateSerializer",
+    "ElectionCycleSerializer",
+    "ElectionDaySerializer",
+    "ElectionEventSerializer",
+    "ElectionSerializer",
+    "ElectionTypeSerializer",
+    "RaceSerializer",
+]
