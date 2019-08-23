@@ -1,13 +1,14 @@
+# Imports from Django.
 from django.db import models
+
+
+# Imports from other dependencies.
 from uuslug import slugify
 
 
 class ElectionCycle(models.Model):
     uid = models.CharField(
-        max_length=10,
-        primary_key=True,
-        editable=False,
-        blank=True
+        max_length=10, primary_key=True, editable=False, blank=True
     )
     slug = models.SlugField(
         blank=True, max_length=4, unique=True, editable=False
@@ -22,5 +23,5 @@ class ElectionCycle(models.Model):
         **uid**: :code:`cycle:{year}`
         """
         self.slug = slugify(self.name)
-        self.uid = 'cycle:{}'.format(self.slug)
+        self.uid = "cycle:{}".format(self.slug)
         super(ElectionCycle, self).save(*args, **kwargs)

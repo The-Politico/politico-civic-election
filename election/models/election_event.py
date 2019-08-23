@@ -1,8 +1,16 @@
+# Imports from Django.
 from django.db import models
-from election.models import ElectionDay, Election
+
+
+# Imports from other dependencies.
 from geography.models import Division
 from government.models import Body
 from uuslug import uuslug
+
+
+# Imports from election.
+from election.models import Election
+from election.models import ElectionDay
 
 
 class ElectionEvent(models.Model):

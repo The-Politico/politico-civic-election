@@ -1,8 +1,15 @@
+# Imports from Django.
 from django.db import models
-from election.models import CandidateElection
+
+
+# Imports from other dependencies.
 from geography.models import Division
 from government.models import Party
 from uuslug import slugify
+
+
+# Imports from election.
+from election.models import CandidateElection
 
 
 class Election(models.Model):

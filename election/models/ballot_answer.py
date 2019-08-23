@@ -1,10 +1,14 @@
+# Imports from python.
 import uuid
 
+
+# Imports from Django.
 from django.db import models
 
 
 class BallotAnswer(models.Model):
     """An answer to a ballot question."""
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     label = models.CharField(max_length=255, blank=True)
@@ -13,4 +17,5 @@ class BallotAnswer(models.Model):
     answer = models.TextField()
     winner = models.BooleanField(default=False)
     ballot_measure = models.ForeignKey(
-        'BallotMeasure', on_delete=models.CASCADE)
+        "BallotMeasure", on_delete=models.CASCADE
+    )

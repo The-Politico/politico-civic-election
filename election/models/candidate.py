@@ -1,9 +1,18 @@
+# Imports from python.
 import uuid
 
+
+# Imports from Django.
 from django.db import models
-from election.models import CandidateElection
+
+
+# Imports from other dependencies.
 from entity.models import Person
 from government.models import Party
+
+
+# Imports from election.
+from election.models import CandidateElection
 
 
 class Candidate(models.Model):
