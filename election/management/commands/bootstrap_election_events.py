@@ -1,14 +1,25 @@
+# Imports from python.
 import csv
-import requests
+from datetime import date
+from datetime import datetime
+
+
+# Imports from Django.
+from django.core.management.base import BaseCommand
+
+
+# Imports from other dependencies.
+from geography.models import Division
 import pytz
+import requests
+from tqdm import tqdm
 import us
 
-from datetime import date, datetime
-from django.core.management.base import BaseCommand
-from tqdm import tqdm
 
-from election.models import ElectionDay, ElectionCycle, ElectionEvent
-from geography.models import Division
+# Imports from election.
+from election.models import ElectionCycle
+from election.models import ElectionDay
+from election.models import ElectionEvent
 
 
 class Command(BaseCommand):

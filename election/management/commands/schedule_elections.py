@@ -1,13 +1,24 @@
+# Imports from python.
 import csv
 from datetime import date
 
-import requests
 
+# Imports from Django.
 from django.core.management.base import BaseCommand
-from election.models import Election, ElectionType, Race, ElectionEvent
+
+
+# Imports from other dependencies.
 from geography.models import DivisionLevel
 from government.models import Party
+import requests
 from tqdm import tqdm
+
+
+# Imports from election.
+from election.models import Election
+from election.models import ElectionEvent
+from election.models import ElectionType
+from election.models import Race
 
 
 class Command(BaseCommand):
