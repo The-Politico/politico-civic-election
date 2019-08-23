@@ -1,12 +1,19 @@
+# Imports from Django.
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from election.models import ElectionCycle
+
+
+# Imports from other dependencies.
 from government.models import Party
 
 
+# Imports from election.
+from election.models import ElectionCycle
+
+
 class PartyFilter(admin.SimpleListFilter):
-    title = _('party')
-    parameter_name = 'party'
+    title = _("party")
+    parameter_name = "party"
 
     def lookups(self, request, model_admin):
         return [
@@ -21,8 +28,8 @@ class PartyFilter(admin.SimpleListFilter):
 
 
 class CycleFilter(admin.SimpleListFilter):
-    title = _('cycle')
-    parameter_name = 'cycle'
+    title = _("cycle")
+    parameter_name = "cycle"
 
     def lookups(self, request, model_admin):
         return [
@@ -37,21 +44,21 @@ class CycleFilter(admin.SimpleListFilter):
 
 
 class CandidateAdmin(admin.ModelAdmin):
-    list_display = ('get_person', 'get_race', 'get_party')
-    search_fields = ('person__full_name', )
-    list_filter = (PartyFilter, CycleFilter,)
-    readonly_fields = ('uid', )
+    list_display = ("get_person", "get_race", "get_party")
+    search_fields = ("person__full_name",)
+    list_filter = (PartyFilter, CycleFilter)
+    readonly_fields = ("uid",)
 
     fieldsets = (
-        ('Relationships', {
-            'fields': ('person', 'party', 'race', 'top_of_ticket')
-        }),
-        ('Identification', {
-            'fields': ('ap_candidate_id', 'incumbent', 'prospective')
-        }),
-        ('Record locators', {
-            'fields': ('uid', )
-        })
+        (
+            "Relationships",
+            {"fields": ("person", "party", "race", "top_of_ticket")},
+        ),
+        (
+            "Identification",
+            {"fields": ("ap_candidate_id", "incumbent", "prospective")},
+        ),
+        ("Record locators", {"fields": ("uid",)}),
     )
 
     def get_person(self, obj):
@@ -63,6 +70,6 @@ class CandidateAdmin(admin.ModelAdmin):
     def get_party(self, obj):
         return obj.party.label
 
-    get_person.short_description = 'Name'
-    get_race.short_description = 'Race'
-    get_party.short_description = 'Party'
+    get_person.short_description = "Name"
+    get_race.short_description = "Race"
+    get_party.short_description = "Party"
