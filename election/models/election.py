@@ -3,23 +3,25 @@ from django.db import models
 
 
 # Imports from other dependencies.
+from civic_utils.models import CivicBaseModel
+from civic_utils.models import UniqueIdentifierMixin
 from geography.models import Division
 from government.models import Party
-from uuslug import slugify
 
 
 # Imports from election.
 from election.models import CandidateElection
 
 
-class Election(models.Model):
+class Election(UniqueIdentifierMixin, CivicBaseModel):
     """
     A specific contest in a race held on a specific day.
     """
 
-    uid = models.CharField(
-        max_length=500, primary_key=True, editable=False, blank=True
-    )
+    natural_key_fields = ["race", "election_day", "party"]
+    uid_prefix = "election"
+    default_serializer = "election.serializers.ElectionSerializer"
+
     election_type = models.ForeignKey(
         "ElectionType", related_name="elections", on_delete=models.PROTECT
     )
@@ -44,19 +46,21 @@ class Election(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        **uid**: :code:`{race.uid}_election:{election_day}-{party}`
+        **uid field**: :code:`election:{election_day}[-{party}]`
+        **identifier**: :code:`<race uid>__<this uid>`
         """
-        if self.party:
-            self.uid = "{}_election:{}-{}".format(
-                self.race.uid,
-                self.election_day.date,
-                slugify(self.party.ap_code),
-            )
-        else:
-            self.uid = "{}_election:{}".format(
-                self.race.uid, self.election_day.date
-            )
+        self.generate_unique_identifier(always_overwrite_uid=True)
+
         super(Election, self).save(*args, **kwargs)
+
+    def get_uid_prefix(self):
+        return f"{self.race.uid}__{self.uid_prefix}"
+
+    def get_uid_base_field(self):
+        if self.party:
+            return f"{self.election_day.slug}-{self.party.slug}"
+
+        return self.election_day.slug
 
     def update_or_create_candidate(
         self, candidate, aggregable=True, uncontested=False

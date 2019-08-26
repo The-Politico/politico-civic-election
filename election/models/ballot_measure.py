@@ -3,15 +3,18 @@ from django.db import models
 
 
 # Imports from other dependencies.
+from civic_utils.models import CivicBaseModel
+from civic_utils.models import UniqueIdentifierMixin
 from geography.models import Division
 
 
-class BallotMeasure(models.Model):
+class BallotMeasure(UniqueIdentifierMixin, CivicBaseModel):
     """A ballot measure."""
 
-    uid = models.CharField(
-        max_length=500, primary_key=True, editable=False, blank=True
-    )
+    natural_key_fields = ["division", "election_day", "number"]
+    uid_prefix = "ballot_measure"
+    uid_base_field = "number"
+    default_serializer = "election.serializers.BallotMeasureSerializer"
 
     label = models.CharField(max_length=255, blank=True)
     short_label = models.CharField(max_length=50, null=True, blank=True)
@@ -25,14 +28,22 @@ class BallotMeasure(models.Model):
         "ElectionDay", related_name="ballot_measures", on_delete=models.PROTECT
     )
 
+    class Meta:
+        unique_together = ("division", "election_day", "number")
+
     def __str__(self):
         return self.uid
 
     def save(self, *args, **kwargs):
         """
-        **uid**: :code:`division_cycle_ballotmeasure:{number}`
+        **uid field**: :code:`ballot_measure:{number}`
+        **identifier**: :code:`<division uid>__<election day uid>__<this uid>`
         """
-        self.uid = "{}_{}_ballotmeasure:{}".format(
-            self.division.uid, self.election_day.uid, self.number
-        )
+        self.generate_unique_identifier(always_overwrite_uid=True)
+
         super(BallotMeasure, self).save(*args, **kwargs)
+
+    def get_uid_prefix(self):
+        return (
+            f"{self.division.uid}__{self.election_day.uid}__{self.uid_prefix}"
+        )

@@ -2,20 +2,22 @@
 from django.db import models
 
 
-class ElectionDay(models.Model):
+# Imports from other dependencies.
+from civic_utils.models import CivicBaseModel
+from civic_utils.models import CommonIdentifiersMixin
+
+
+class ElectionDay(CommonIdentifiersMixin, CivicBaseModel):
     """
     A day on which one or many elections can be held.
     """
 
-    uid = models.CharField(
-        max_length=500, primary_key=True, editable=False, blank=True
-    )
-
-    slug = models.SlugField(
-        blank=True, max_length=255, unique=True, editable=False
-    )
+    natural_key_fields = ["cycle", "date"]
+    uid_prefix = "date"
+    default_serializer = "election.serializers.ElectionDaySerializer"
 
     date = models.DateField(unique=True)
+
     cycle = models.ForeignKey(
         "ElectionCycle",
         related_name="elections_days",
@@ -27,11 +29,20 @@ class ElectionDay(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        **uid**: :code:`{cycle.uid}_date:{date}`
+        **uid field**: :code:`date:{date}`
+        **identifier**: :code:`<cycle uid>__<this uid>`
         """
-        self.uid = "{}_date:{}".format(self.cycle.uid, self.date)
-        self.slug = "{}".format(self.date)
+        self.generate_common_identifiers(
+            always_overwrite_slug=True, always_overwrite_uid=True
+        )
+
         super(ElectionDay, self).save(*args, **kwargs)
+
+    def get_uid_base_field(self):
+        return self.date.strftime("%Y-%m-%d")
+
+    def get_uid_prefix(self):
+        return f"{self.cycle.uid}__{self.uid_prefix}"
 
     def special_election_datestring(self):
         """

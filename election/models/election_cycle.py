@@ -3,16 +3,18 @@ from django.db import models
 
 
 # Imports from other dependencies.
+from civic_utils.models import CivicBaseModel
+from civic_utils.models import CommonIdentifiersMixin
 from uuslug import slugify
 
 
-class ElectionCycle(models.Model):
-    uid = models.CharField(
-        max_length=10, primary_key=True, editable=False, blank=True
-    )
-    slug = models.SlugField(
-        blank=True, max_length=4, unique=True, editable=False
-    )
+class ElectionCycle(CommonIdentifiersMixin, CivicBaseModel):
+
+    natural_key_fields = ["slug"]
+    uid_prefix = "cycle"
+    uid_base_field = "name"
+    default_serializer = "election.serializers.ElectionCycleSerializer"
+
     name = models.CharField(max_length=4)
 
     def __str__(self):
@@ -20,8 +22,13 @@ class ElectionCycle(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        **uid**: :code:`cycle:{year}`
+        **uid field/identifier**: :code:`cycle:{year}`
         """
-        self.slug = slugify(self.name)
-        self.uid = "cycle:{}".format(self.slug)
+        self.generate_common_identifiers(
+            always_overwrite_slug=True, always_overwrite_uid=True
+        )
+
         super(ElectionCycle, self).save(*args, **kwargs)
+
+    def get_uid_suffix(self):
+        return self.slug

@@ -2,10 +2,19 @@
 from django.db import models
 
 
-class ElectionType(models.Model):
+# Imports from other dependencies.
+from civic_utils.models import CivicBaseModel
+from civic_utils.models import UniqueIdentifierMixin
+
+
+class ElectionType(UniqueIdentifierMixin, CivicBaseModel):
     """
     e.g., "General", "Primary"
     """
+
+    natural_key_fields = ["slug"]
+    uid_prefix = "electiontype"
+    default_serializer = "election.serializers.ElectionTypeSerializer"
 
     GENERAL = "general"
     PARTY_PRIMARY = "party-primary"
@@ -21,13 +30,10 @@ class ElectionType(models.Model):
         (GENERAL_RUNOFF, "General Runoff"),
     )
 
-    uid = models.CharField(
-        max_length=500, primary_key=True, editable=False, blank=True
-    )
-
     slug = models.SlugField(
         blank=True, max_length=255, unique=True, choices=TYPES
     )
+
     label = models.CharField(max_length=255, blank=True)
     short_label = models.CharField(max_length=50, null=True, blank=True)
 
@@ -42,9 +48,10 @@ class ElectionType(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        **uid**: :code:`electiontype:{name}`
+        **uid field/identifier**: :code:`electiontype:{slug}`
         """
-        self.uid = "electiontype:{}".format(self.slug)
+        self.generate_unique_identifier(always_overwrite_uid=True)
+
         super(ElectionType, self).save(*args, **kwargs)
 
     def is_primary(self):

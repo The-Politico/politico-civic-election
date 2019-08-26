@@ -3,9 +3,10 @@ from django.db import models
 
 
 # Imports from other dependencies.
+from civic_utils.models import CivicBaseModel
+from civic_utils.models import CommonIdentifiersMixin
 from geography.models import Division
 from government.models import Body
-from uuslug import uuslug
 
 
 # Imports from election.
@@ -13,8 +14,18 @@ from election.models import Election
 from election.models import ElectionDay
 
 
-class ElectionEvent(models.Model):
+class ElectionEvent(CommonIdentifiersMixin, CivicBaseModel):
     """A statewide election event"""
+
+    natural_key_fields = [
+        "division",
+        "election_day",
+        "event_type",
+        "dem_primary_type",
+        "gop_primary_type",
+    ]
+    uid_prefix = "electionevent"
+    default_serializer = "election.serializers.ElectionEventSerializer"
 
     PRIMARIES = "Primaries"
     PRIMARIES_RUNOFF = "Primaries Runoff"
@@ -48,9 +59,6 @@ class ElectionEvent(models.Model):
         (JUNGLE, "Jungle"),
     )
 
-    slug = models.SlugField(
-        blank=True, max_length=255, unique=True, editable=False
-    )
     label = models.CharField(max_length=100)
     event_type = models.CharField(max_length=50, choices=EVENT_TYPES)
     dem_primary_type = models.CharField(
@@ -69,18 +77,44 @@ class ElectionEvent(models.Model):
     registration_deadline = models.DateField(null=True, blank=True)
     poll_closing_time = models.DateTimeField(null=True, blank=True)
 
+    class Meta:
+        unique_together = (
+            "division",
+            "election_day",
+            "event_type",
+            "dem_primary_type",
+            "gop_primary_type",
+        )
+
     def __str__(self):
         return self.label
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            slug = "{0}-{1}".format(self.label, self.election_day.cycle.name)
-
-            self.slug = uuslug(
-                slug, instance=self, max_length=100, separator="-", start_no=2
-            )
+        """
+        **uid field**: :code:`electionevent:{event type}[({party types})]`
+        **identifier**: :code:`<division uid>__<election day uid>__<this uid>`
+        """
+        self.generate_common_identifiers(
+            always_overwrite_slug=True, always_overwrite_uid=True
+        )
 
         super(ElectionEvent, self).save(*args, **kwargs)
+
+    def get_uid_base_field(self):
+        if self.dem_primary_type and self.gop_primary_type:
+            return (
+                f"{self.event_type}"
+                f"(DEM-{self.dem_primary_type},GOP-{self.gop_primary_type})"
+            )
+        elif self.dem_primary_type:
+            return f"{self.event_type}(DEM-{self.dem_primary_type})"
+        elif self.gop_primary_type:
+            return f"{self.event_type}(GOP-{self.gop_primary_type})"
+
+        return self.event_type
+
+    def get_uid_prefix(self):
+        f"{self.division.uid}__{self.election_day.uid}__{self.uid_prefix}"
 
     def get_statewide_offices(self):
         statewide_elections = Election.objects.filter(

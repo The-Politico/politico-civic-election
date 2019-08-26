@@ -1,28 +1,27 @@
-# Imports from python.
-import uuid
-
-
 # Imports from Django.
 from django.db import models
 
 
 # Imports from other dependencies.
+from civic_utils.models import CivicBaseModel
+from civic_utils.models import UniqueIdentifierMixin
+from civic_utils.models import UUIDMixin
 from entity.models import Person
 from government.models import Party
 
 
 # Imports from election.
-from election.models import CandidateElection
+from election.models.candidate_election import CandidateElection
 
 
-class Candidate(models.Model):
+class Candidate(UniqueIdentifierMixin, UUIDMixin, CivicBaseModel):
     """
     A person who runs in a race for an office.
     """
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-
-    uid = models.CharField(max_length=500, editable=False, blank=True)
+    natural_key_fields = ["person", "race", "party"]
+    uid_prefix = "candidate"
+    default_serializer = "election.serializers.CandidateSerializer"
 
     race = models.ForeignKey(
         "Race", related_name="candidates", on_delete=models.PROTECT
@@ -47,17 +46,20 @@ class Candidate(models.Model):
         help_text="The candidate has not yet declared her candidacy.",
     )
 
-    def save(self, *args, **kwargs):
-        """
-        **uid**: :code:`{person.uid}_candidate:{party.uid}-{cycle.ap_code}`
-        """
-        self.uid = "{}_candidate:{}-{}".format(
-            self.person.uid, self.party.uid, self.race.cycle.uid
-        )
-        super(Candidate, self).save(*args, **kwargs)
+    class Meta:
+        unique_together = ("person", "race", "party")
 
     def __str__(self):
         return self.uid
+
+    def save(self, *args, **kwargs):
+        """
+        **uid field**: :code:`candidate:{party slug}-{cycle slug}`
+        **identifier**: :code:`<person uid>__<this uid>`
+        """
+        self.generate_unique_identifier(always_overwrite_uid=True)
+
+        super(Candidate, self).save(*args, **kwargs)
 
     def get_candidate_election(self, election):
         """Get a CandidateElection."""
@@ -102,3 +104,9 @@ class Candidate(models.Model):
             delegates = delegates | ce.delegates.all()
 
         return delegates
+
+    def get_uid_prefix(self):
+        return "{self.person.uid}__{self.uid_prefix}"
+
+    def get_uid_base_field(self):
+        return f"{self.party.slug}-{self.race.cycle.slug}"
