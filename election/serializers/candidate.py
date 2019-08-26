@@ -1,12 +1,15 @@
 # Imports from other dependencies.
-from rest_framework import serializers
+from civic_utils.serializers import CommandLineListSerializer
+from civic_utils.serializers import NaturalKeySerializerMixin
 
 
 # Imports from election.
 from election.models import Candidate
 
 
-class CandidateSerializer(serializers.ModelSerializer):
-    class Meta:
+class CandidateSerializer(
+    NaturalKeySerializerMixin, CommandLineListSerializer
+):
+    class Meta(CommandLineListSerializer.Meta):
         model = Candidate
         fields = "__all__"
