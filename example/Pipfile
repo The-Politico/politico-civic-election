@@ -13,7 +13,7 @@ django = ">=2.2"
 djangorestframework = "*"
 "dj-database-url" = "*"
 "psycopg2-binary" = "*"
-"politico-civic-utils" = "~=0.0.7"
+"politico-civic-utils" = "~=0.0.8"
 "politico-civic-entity" = {file = "https://github.com/The-Politico/politico-civic-entity/archive/kangaroo/common-base-classes.tar.gz"}
 "politico-civic-geography" = {file = "https://github.com/The-Politico/politico-civic-geography/archive/kangaroo/common-base-classes.tar.gz"}
 "politico-civic-government" = {file = "https://github.com/The-Politico/politico-civic-government/archive/kangaroo/common-base-classes.tar.gz"}
