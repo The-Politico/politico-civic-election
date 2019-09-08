@@ -40,6 +40,7 @@ class Election(UniqueIdentifierMixin, CivicBaseModel):
     division = models.ForeignKey(
         Division, related_name="elections", on_delete=models.PROTECT
     )
+    ap_election_id = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
         return self.race.office.label
