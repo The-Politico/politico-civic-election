@@ -24,7 +24,7 @@ setup(
     description=(
         "Manage elections, candidates and ballots, the POLITICO way."
     ),
-    long_description=README,
+    long_description="",
     long_description_content_type="text/markdown",
     url=REPO_URL,
     download_url="{repo_url}archive/{version}.tar.gz".format(
