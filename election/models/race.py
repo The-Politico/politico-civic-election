@@ -5,6 +5,7 @@ from django.db import models
 # Imports from other dependencies.
 from civic_utils.models import CivicBaseModel
 from civic_utils.models import CommonIdentifiersMixin
+from geography.models import Division
 from government.models import Office
 
 
@@ -16,7 +17,7 @@ class Race(CommonIdentifiersMixin, CivicBaseModel):
     SPECIAL_RACE_SLUG = "Special"
     STANDARD_RACE_SLUG = "Standard"
 
-    natural_key_fields = ["office", "cycle", "special"]
+    natural_key_fields = ["office", "cycle", "division", "special"]
     uid_prefix = "race"
     default_serializer = "election.serializers.RaceSerializer"
 
@@ -29,6 +30,14 @@ class Race(CommonIdentifiersMixin, CivicBaseModel):
     )
     cycle = models.ForeignKey(
         "ElectionCycle", related_name="races", on_delete=models.PROTECT
+    )
+    division = models.ForeignKey(
+        Division,
+        related_name="races",
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
+        help_text="Generally, only used for the presidency.",
     )
     special = models.BooleanField(default=False)
 
@@ -57,6 +66,8 @@ class Race(CommonIdentifiersMixin, CivicBaseModel):
         return self.label
 
     def get_uid_prefix(self):
+        if self.division:
+            return f"{self.office.uid}__{self.cycle.uid}__{self.division.uid}__{self.uid_prefix}"
         return f"{self.office.uid}__{self.cycle.uid}__{self.uid_prefix}"
 
     def get_uid_suffix(self):
