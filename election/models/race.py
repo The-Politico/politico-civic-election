@@ -54,6 +54,9 @@ class Race(CommonIdentifiersMixin, CivicBaseModel):
         if self.special:
             name_label = f"{name_label} {self.SPECIAL_RACE_SLUG}"
 
+        if self.division:
+            name_label = f"{name_label} {self.division.label}"
+
         self.label = name_label
 
         self.generate_common_identifiers(

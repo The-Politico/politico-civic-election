@@ -23,7 +23,7 @@ class RaceAdminForm(forms.ModelForm):
 
 class RaceAdmin(admin.ModelAdmin):
     form = RaceAdminForm
-    list_display = ("get_office", "get_cycle", "special")
+    list_display = ("get_office", "get_cycle", "get_division", "special")
     autocomplete_fields = ["office"]
     search_fields = ["office__label", "cycle__name", "label"]
     ordering = ("office__label", "cycle__name")
@@ -34,7 +34,7 @@ class RaceAdmin(admin.ModelAdmin):
             "Names and labeling",
             {"fields": ("label", "short_label", "special")},
         ),
-        ("Relationships", {"fields": ("office", "cycle")}),
+        ("Relationships", {"fields": ("office", "cycle", "division")}),
         ("Record locators", {"fields": ("uid", "slug")}),
     )
 
@@ -44,5 +44,11 @@ class RaceAdmin(admin.ModelAdmin):
     def get_cycle(self, obj):
         return obj.cycle.name
 
+    def get_division(self, obj):
+        if obj.division:
+            return obj.division.label
+        return None
+
     get_office.short_description = "Office"
     get_cycle.short_description = "Cycle"
+    get_division.short_description = "Division"
