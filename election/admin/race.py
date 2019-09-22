@@ -39,6 +39,8 @@ class RaceAdmin(admin.ModelAdmin):
     )
 
     def get_office(self, obj):
+        if obj.division:
+            return f"{obj.office.label} {obj.division.label}"
         return obj.office.label
 
     def get_cycle(self, obj):
