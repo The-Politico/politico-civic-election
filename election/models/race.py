@@ -9,10 +9,26 @@ from geography.models import Division
 from government.models import Office
 
 
+# Imports from election.
+from election.models.managers import RaceManager
+
+
 class Race(CommonIdentifiersMixin, CivicBaseModel):
     """
     A race for an office comprised of one or many elections.
     """
+
+    ELECTORAL_COLLEGE_CHOICE = "electoral-college"
+    SENATE_CHOICE = "senate"
+    HOUSE_CHOICE = "house"
+    GOVERNOR_CHOICE = "governorships"
+
+    BODY_CHOICES = (
+        (ELECTORAL_COLLEGE_CHOICE, "ElectoralCollege"),
+        (SENATE_CHOICE, "Senate"),
+        (HOUSE_CHOICE, "House"),
+        (GOVERNOR_CHOICE, "Governorships"),
+    )
 
     SPECIAL_RACE_SLUG = "Special"
     STANDARD_RACE_SLUG = "Standard"
@@ -40,6 +56,8 @@ class Race(CommonIdentifiersMixin, CivicBaseModel):
         help_text="Generally, only used for the presidency.",
     )
     special = models.BooleanField(default=False)
+
+    objects = RaceManager()
 
     def __str__(self):
         return self.label
