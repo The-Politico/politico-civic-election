@@ -50,6 +50,12 @@ class ElectionAdmin(admin.ModelAdmin):
         "race__special",
         "election_type__label",
     )
+    list_select_related = (
+        "election_day",
+        "election_type",
+        "race",
+        "race__office",
+    )
     ordering = ("election_day__date", "division__label", "party__label")
     search_fields = ("race__label", "election_day__date", "election_day__slug")
     autocomplete_fields = ["race", "division"]

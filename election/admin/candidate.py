@@ -45,9 +45,10 @@ class CycleFilter(admin.SimpleListFilter):
 
 class CandidateAdmin(admin.ModelAdmin):
     list_display = ("get_person", "get_race", "get_party")
-    search_fields = ("person__full_name",)
     list_filter = (PartyFilter, CycleFilter)
+    list_select_related = ("party", "person", "race")
     readonly_fields = ("uid",)
+    search_fields = ("person__full_name",)
 
     fieldsets = (
         (

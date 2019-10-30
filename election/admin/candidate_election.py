@@ -27,6 +27,12 @@ class CandidateElectionAdminForm(forms.ModelForm):
 class CandidateElectionAdmin(admin.ModelAdmin):
     form = CandidateElectionAdminForm
     list_display = ("get_candidate", "get_election")
+    list_select_related = (
+        "candidate",
+        "candidate__person",
+        "election",
+        "election__race",
+    )
     search_fields = ("candidate__person__name", "election__race__label")
 
     def get_candidate(self, obj):

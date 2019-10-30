@@ -24,6 +24,8 @@ class RaceAdminForm(forms.ModelForm):
 class RaceAdmin(admin.ModelAdmin):
     form = RaceAdminForm
     list_display = ("get_office", "get_cycle", "get_division", "special")
+    list_filter = ("cycle__name",)
+    list_select_related = ("cycle", "office")
     autocomplete_fields = ["office"]
     search_fields = ["office__label", "cycle__name", "label"]
     ordering = ("office__label", "cycle__name")
@@ -32,7 +34,7 @@ class RaceAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             "Names and labeling",
-            {"fields": ("label", "short_label", "special")},
+            {"fields": ("label", "short_label", "special", "description")},
         ),
         ("Relationships", {"fields": ("office", "cycle", "division")}),
         ("Record locators", {"fields": ("uid", "slug")}),
