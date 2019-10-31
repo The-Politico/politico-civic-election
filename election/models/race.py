@@ -15,7 +15,7 @@ from election.models.managers import RaceManager
 
 class Race(CommonIdentifiersMixin, CivicBaseModel):
     """
-    A race for an office comprised of one or many elections.
+    A race for an office, comprising one or many elections.
     """
 
     ELECTORAL_COLLEGE_CHOICE = "electoral-college"
@@ -54,6 +54,11 @@ class Race(CommonIdentifiersMixin, CivicBaseModel):
         blank=True,
         null=True,
         help_text="Generally, only used for the presidency.",
+    )
+    electoral_votes = models.IntegerField(
+        blank=True,
+        null=True,
+        help_text="The number of presidential electors this area awards.",
     )
     special = models.BooleanField(default=False)
 
