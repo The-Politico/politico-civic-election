@@ -23,11 +23,15 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "django_filters",
     "entity",
     "geography",
     "government",
     "election",
 ]
+
+if DEBUG:
+    INSTALLED_APPS += ["debug_toolbar"]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -38,6 +42,9 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+if DEBUG:
+    MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
 ROOT_URLCONF = "exampleapp.urls"
 
@@ -97,5 +104,20 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
+
+########################
+# DJANGO DEBUG TOOLBAR #
+########################
+
+# See:
+# https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html
+
+INTERNAL_IPS = ("127.0.0.1", "127.0.0.1:8000")
+
+DEBUG_TOOLBAR_CONFIG = {"INTERCEPT_REDIRECTS": True}
+
+
 #########################
 # election settings
+
+ELECTION_API_TOKEN = "f-7sbb*yix8cym(^s5xe0yay&1$$snd*7w)7ki5b08d8qv2r05"
