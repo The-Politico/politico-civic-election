@@ -7,6 +7,7 @@ from rest_framework import routers
 
 
 # Imports from election.
+from election.viewsets.api import StatewiseElectionsViewSet
 from election.viewsets import BallotAnswerViewSet
 from election.viewsets import BallotMeasureViewSet
 from election.viewsets import CandidateViewSet
@@ -28,4 +29,12 @@ router.register(r"election-types", ElectionTypeViewSet)
 router.register(r"elections", ElectionViewSet)
 router.register(r"races", RaceViewSet)
 
-urlpatterns = [path("api/", include(router.urls))]
+new_api_router = routers.DefaultRouter()
+new_api_router.register(
+    r"elections/(?P<year>\d{4})", StatewiseElectionsViewSet
+)
+
+urlpatterns = [
+    path("api/v2/", include(new_api_router.urls), name="v2-api"),
+    path("api/", include(router.urls)),
+]
