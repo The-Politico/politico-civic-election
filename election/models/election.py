@@ -22,7 +22,11 @@ class Election(UniqueIdentifierMixin, CivicBaseModel):
     default_serializer = "election.serializers.ElectionSerializer"
 
     election_ballot = models.ForeignKey(
-        "ElectionBallot", related_name="elections", on_delete=models.PROTECT
+        "ElectionBallot",
+        related_name="elections",
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
     )
 
     candidates = models.ManyToManyField(

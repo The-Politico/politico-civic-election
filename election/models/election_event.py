@@ -30,7 +30,11 @@ class ElectionEvent(CommonIdentifiersMixin, CivicBaseModel):
     )
     election_day = models.ForeignKey(ElectionDay, on_delete=models.PROTECT)
     election_type = models.ForeignKey(
-        ElectionType, related_name="election_events", on_delete=models.PROTECT
+        ElectionType,
+        related_name="election_events",
+        blank=True,
+        null=True,
+        on_delete=models.PROTECT,
     )
 
     notes = models.TextField(blank=True, null=True)
