@@ -57,7 +57,10 @@ class ElectionAdmin(admin.ModelAdmin):
     inlines = [CandidateElectionInline]
     readonly_fields = ("uid",)
     fieldsets = (
-        ("Relationships", {"fields": ("race", "ap_election_id")}),
+        (
+            "Relationships",
+            {"fields": ("election_ballot", "race", "ap_election_id")},
+        ),
         ("Record locators", {"fields": ("uid",)}),
     )
 
