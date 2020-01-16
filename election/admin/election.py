@@ -3,14 +3,8 @@ from django.contrib import admin
 from django import forms
 
 
-# Imports from other dependencies.
-from government.models import Party
-
-
 # Imports from election.
 from election.models import CandidateElection
-from election.models import ElectionDay
-from election.models import ElectionType
 
 
 class CustomModelChoiceField(forms.ModelChoiceField):
@@ -28,16 +22,7 @@ class CandidateElectionInline(admin.StackedInline):
     extra = 0
 
 
-class ElectionAdminForm(forms.ModelForm):
-    election_type = CustomModelChoiceField(queryset=ElectionType.objects.all())
-    election_day = CustomModelChoiceField(queryset=ElectionDay.objects.all())
-    party = CustomModelChoiceField(
-        queryset=Party.objects.all(), required=False
-    )
-
-
 class ElectionAdmin(admin.ModelAdmin):
-    form = ElectionAdminForm
     list_display = (
         "get_office",
         "election_date",
@@ -46,34 +31,33 @@ class ElectionAdmin(admin.ModelAdmin):
         "special",
     )
     list_filter = (
-        "election_day__date",
+        "election_ballot__election_event__election_day__date",
         "race__special",
-        "election_type__label",
+        "election_ballot__election_event__election_type__label",
     )
     list_select_related = (
-        "election_day",
-        "election_type",
+        "election_ballot",
+        "election_ballot__election_event",
+        "election_ballot__election_event__election_day",
+        "election_ballot__election_event__election_type",
         "race",
         "race__office",
     )
-    ordering = ("election_day__date", "division__label", "party__label")
-    search_fields = ("race__label", "election_day__date", "election_day__slug")
-    autocomplete_fields = ["race", "division"]
+    ordering = (
+        "election_ballot__election_event__election_day__date",
+        "election_ballot__election_event__division__label",
+        "election_ballot__party__label",
+    )
+    search_fields = (
+        "race__label",
+        "election_ballot__election_event__election_day__date",
+        "election_ballot__election_event__election_day__slug",
+    )
+    autocomplete_fields = ["race"]
     inlines = [CandidateElectionInline]
     readonly_fields = ("uid",)
     fieldsets = (
-        (
-            "Relationships",
-            {
-                "fields": (
-                    "race",
-                    "election_type",
-                    "election_day",
-                    "division",
-                    "party",
-                )
-            },
-        ),
+        ("Relationships", {"fields": ("race", "ap_election_id")}),
         ("Record locators", {"fields": ("uid",)}),
     )
 
@@ -81,14 +65,14 @@ class ElectionAdmin(admin.ModelAdmin):
         return obj.race.office.label
 
     def election_date(self, obj):
-        return obj.election_day.date
+        return obj.election_ballot.election_event.election_day.date
 
     def get_election_type(self, obj):
-        return obj.election_type.label
+        return obj.election_ballot.election_event.election_type.label
 
     def get_party(self, obj):
-        if obj.party:
-            return obj.party.label
+        if obj.election_ballot.party:
+            return obj.election_ballot.party.label
         else:
             return None
 
@@ -96,5 +80,5 @@ class ElectionAdmin(admin.ModelAdmin):
         return obj.race.special
 
     get_office.short_description = "Office"
-    get_party.short_description = "Primary Party"
     get_election_type.short_description = "Election Type"
+    get_party.short_description = "Primary Party"
