@@ -29,4 +29,8 @@ Settings.API_PAGINATION_CLASS = getattr(
     "election.pagination.ResultsPagination",
 )
 
+Settings.API_TOKEN = getattr(
+    project_settings, "ELECTION_API_TOKEN", "super-secure-token"
+)
+
 settings = Settings
