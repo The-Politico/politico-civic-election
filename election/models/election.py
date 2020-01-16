@@ -6,7 +6,6 @@ from django.db import models
 from civic_utils.models import CivicBaseModel
 from civic_utils.models import UniqueIdentifierMixin
 from geography.models import Division
-from government.models import Party
 
 
 # Imports from election.
@@ -18,27 +17,19 @@ class Election(UniqueIdentifierMixin, CivicBaseModel):
     A specific contest in a race held on a specific day.
     """
 
-    natural_key_fields = ["race", "election_day", "party"]
+    natural_key_fields = ["race", "election_ballot"]
     uid_prefix = "election"
     default_serializer = "election.serializers.ElectionSerializer"
 
-    election_type = models.ForeignKey(
-        "ElectionType", related_name="elections", on_delete=models.PROTECT
+    election_ballot = models.ForeignKey(
+        "ElectionBallot", related_name="elections", on_delete=models.PROTECT
     )
+
     candidates = models.ManyToManyField(
         "Candidate", through="CandidateElection"
     )
     race = models.ForeignKey(
         "Race", related_name="elections", on_delete=models.PROTECT
-    )
-    party = models.ForeignKey(
-        Party, null=True, blank=True, on_delete=models.PROTECT
-    )
-    election_day = models.ForeignKey(
-        "ElectionDay", related_name="elections", on_delete=models.PROTECT
-    )
-    division = models.ForeignKey(
-        Division, related_name="elections", on_delete=models.PROTECT
     )
     ap_election_id = models.CharField(max_length=10, blank=True, null=True)
 
@@ -58,10 +49,15 @@ class Election(UniqueIdentifierMixin, CivicBaseModel):
         return f"{self.race.uid}__{self.uid_prefix}"
 
     def get_uid_base_field(self):
-        if self.party:
-            return f"{self.election_day.slug}-{self.party.slug}"
+        if self.election_ballot.party:
+            return "-".join(
+                [
+                    f"{self.election_ballot.election_event.election_day.slug}",
+                    f"{self.election_ballot.party.slug}",
+                ]
+            )
 
-        return self.election_day.slug
+        return self.election_ballot.election_event.election_day.slug
 
     def update_or_create_candidate(
         self, candidate, aggregable=True, uncontested=False

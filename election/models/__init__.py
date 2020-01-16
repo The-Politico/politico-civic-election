@@ -4,6 +4,7 @@ from election.models.ballot_measure import BallotMeasure
 from election.models.candidate import Candidate
 from election.models.candidate_election import CandidateElection
 from election.models.election import Election
+from election.models.election_ballot import ElectionBallot
 from election.models.election_cycle import ElectionCycle
 from election.models.election_day import ElectionDay
 from election.models.election_event import ElectionEvent
@@ -17,6 +18,7 @@ __all__ = [
     "Candidate",
     "CandidateElection",
     "Election",
+    "ElectionBallot",
     "ElectionCycle",
     "ElectionDay",
     "ElectionEvent",

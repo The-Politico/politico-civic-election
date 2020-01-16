@@ -17,15 +17,19 @@ class ElectionType(UniqueIdentifierMixin, CivicBaseModel):
     default_serializer = "election.serializers.ElectionTypeSerializer"
 
     GENERAL = "general"
-    PARTY_PRIMARY = "party-primary"
-    JUNGLE_PRIMARY = "jungle-primary"
+    PARTISAN_CAUCUS = "partisan-caucus"
+    PARTISAN_FIREHOUSE_CAUCUS = "partisan-firehouse-caucus"
+    PARTISAN_PRIMARY = "partisan-primary"
+    ALL_PARTY_PRIMARY = "all-party-primary"  # Let's not say 'Jungle primary.'
     PRIMARY_RUNOFF = "primary-runoff"
     GENERAL_RUNOFF = "general-runoff"
 
     TYPES = (
-        (GENERAL, "General"),
-        (PARTY_PRIMARY, "Party Primary"),
-        (JUNGLE_PRIMARY, "Jungle Primary"),
+        (GENERAL, "General election"),
+        (PARTISAN_CAUCUS, "Caucus"),
+        (PARTISAN_FIREHOUSE_CAUCUS, "Firehouse Caucus"),
+        (PARTISAN_PRIMARY, "Primary"),
+        (ALL_PARTY_PRIMARY, "All-party Primary"),
         (PRIMARY_RUNOFF, "Primary Runoff"),
         (GENERAL_RUNOFF, "General Runoff"),
     )
@@ -55,7 +59,11 @@ class ElectionType(UniqueIdentifierMixin, CivicBaseModel):
         super(ElectionType, self).save(*args, **kwargs)
 
     def is_primary(self):
-        if self.slug in [self.PARTY_PRIMARY, self.JUNGLE_PRIMARY]:
+        if self.slug in [
+            self.PARTISAN_PRIMARY,
+            self.PARTISAN_CAUCUS,
+            self.ALL_PARTY_PRIMARY,
+        ]:
             return True
         else:
             return False
