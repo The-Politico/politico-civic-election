@@ -17,11 +17,13 @@ djangorestframework = "*"
 "psycopg2-binary" = "*"
 "politico-civic-utils" = "~=1.0a1.dev1"
 "politico-civic-entity" = "~=1.0a1.dev1"
-"politico-civic-geography" = "~=1.0a1.dev1"
+"politico-civic-geography" = "~=1.0a1.dev5"
 "politico-civic-government" = "~=1.0a1.dev1"
+"us-elections" = "~=0.4.1"
 "election" = {path = "./..", editable = true}
 
 [dev-packages]
+django-debug-toolbar = "*"
 ipython = "*"
 pytest = "*"
 "flake8" = "*"
