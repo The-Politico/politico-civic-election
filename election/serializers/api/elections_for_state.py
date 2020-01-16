@@ -10,14 +10,10 @@ from election.serializers.api.election_event import ElectionEventAPISerializer
 
 class StatewiseElectionAPISerializer(CommandLineListSerializer):
     fips = serializers.SerializerMethodField()
-    postal = serializers.SerializerMethodField()
     elections = serializers.SerializerMethodField()
 
     def get_fips(self, obj):
-        return obj.code_components["fips"]["state"]
-
-    def get_postal(self, obj):
-        return obj.code_components["postal"]
+        return obj.code_components.get("fips", {"state": "-"}).get("state")
 
     def get_elections(self, obj):
         return ElectionEventAPISerializer(
@@ -26,4 +22,4 @@ class StatewiseElectionAPISerializer(CommandLineListSerializer):
 
     class Meta(CommandLineListSerializer.Meta):
         model = Division
-        fields = ("name", "fips", "slug", "postal", "elections")
+        fields = ("name", "fips", "slug", "elections")
