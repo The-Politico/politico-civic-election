@@ -47,11 +47,13 @@ setup(
     install_requires=[
         "django",
         "djangorestframework",
+        "django-filter",
         "dj-database-url",
         "psycopg2-binary",
         "politico-civic-entity",
         "politico-civic-geography",
         "politico-civic-government",
+        "us-elections",
     ],
     extras_require={"test": ["pytest"]},
 )
