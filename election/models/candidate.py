@@ -106,7 +106,7 @@ class Candidate(UniqueIdentifierMixin, UUIDMixin, CivicBaseModel):
         return delegates
 
     def get_uid_prefix(self):
-        return "{self.person.uid}__{self.uid_prefix}"
+        return f"{self.person.uid}__{self.uid_prefix}"
 
     def get_uid_base_field(self):
         return f"{self.party.slug}-{self.race.cycle.slug}"
