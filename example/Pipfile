@@ -12,15 +12,16 @@ allow_prereleases = true
 
 [packages]
 django = ">=2.2"
+django-filter = "*"
 djangorestframework = "*"
 "dj-database-url" = "*"
 "psycopg2-binary" = "*"
-"politico-civic-utils" = "~=1.0a1.dev1"
-"politico-civic-entity" = "~=1.0a1.dev1"
+"politico-civic-utils" = "~=1.0a1.dev11"
+"politico-civic-entity" = "~=1.0a1.dev2"
 "politico-civic-geography" = "~=1.0a1.dev5"
-"politico-civic-government" = "~=1.0a1.dev1"
-"us-elections" = "~=0.4.1"
+"politico-civic-government" = "~=1.0a1.dev4"
 "election" = {path = "./..", editable = true}
+"us-elections" = "~=0.4.1"
 
 [dev-packages]
 django-debug-toolbar = "*"
