@@ -9,18 +9,20 @@ from government.models import Jurisdiction
 import us
 
 
-FED_GOVT_ID = (
-    Jurisdiction.objects.filter(name="U.S. Federal Government")
-    .values_list("id", flat=True)
-    .get()
-)
-
-
 class RaceQuerySet(CivicBaseQuerySet):
     def filter_by_cycle(self, cycle_slug):
         return self.filter(cycle__slug=str(cycle_slug))
 
     def filter_by_body(self, body_name):
+        try:
+            FED_GOVT_ID = (
+                Jurisdiction.objects.filter(name="U.S. Federal Government")
+                .values_list("id", flat=True)
+                .get()
+            )
+        except Jurisdiction.DoesNotExist:
+            FED_GOVT_ID = 0
+
         if body_name == self.model.ELECTORAL_COLLEGE_CHOICE:
             return self.select_related(
                 "office__body", "office__division__level"
