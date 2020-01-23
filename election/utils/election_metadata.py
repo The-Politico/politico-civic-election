@@ -32,6 +32,21 @@ def load_election_metadata(election_data):
         "poll_closing_time": getattr(  # DateTimeField.
             election_data, "election_polls_close", None
         ),
+        "who_can_vote": getattr(  # TextField.
+            election_data, "who_can_vote", None
+        ),
+        "voters_register_by_party": getattr(  # NullBooleanField.
+            election_data, "voters_register_by_party", None
+        ),
+        "party_reaffiliation_deadline_independent_voters": getattr(  # Date.
+            election_data, "party_reaffil_deadline_indeps", None
+        ),
+        "party_reaffiliation_deadline_other_party_voters": getattr(  # Date.
+            election_data, "party_reaffil_deadline_others", None
+        ),
+        "voting_reaffiliates_automatically": getattr(  # TextField.
+            election_data, "voting_reaffiliates_automatically", None
+        ),
     }
 
     raw_election_level = getattr(election_data, "election_level", "downticket")
