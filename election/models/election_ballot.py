@@ -36,6 +36,29 @@ class ElectionBallot(CommonIdentifiersMixin, CivicBaseModel):
         (DOWNTICKET_OFFICES, "Congressional & Statewide races"),
     )
 
+    ONLY_PARTY_MEMBERS_VOTE = "only_party_members"
+    PARTY_MEMBERS_AND_INDEPENDENTS_VOTE = "party_members_and_independents"
+    ALL_VOTERS_VOTE = "all_voters"
+
+    WHO_CAN_VOTE_CHOICES = (
+        (ONLY_PARTY_MEMBERS_VOTE, "Only party members"),
+        (PARTY_MEMBERS_AND_INDEPENDENTS_VOTE, "Party members & independents"),
+        (ALL_VOTERS_VOTE, "All voters"),
+    )
+
+    AUTOMATIC_REAFFILIATION = "yes"
+    AUTOMATIC_REAFFILIATION_WITH_PETITION = "yes-unless-immediate-petition"
+    NO_REAFFILIATION = "no"
+
+    PARTY_REAFFILIATION_EFFECT_CHOICES = (
+        (AUTOMATIC_REAFFILIATION, "Yes"),
+        (
+            AUTOMATIC_REAFFILIATION_WITH_PETITION,
+            "Yes (unless voters file a petition when registering)",
+        ),
+        (NO_REAFFILIATION, "No"),
+    )
+
     election_event = models.ForeignKey(
         "ElectionEvent", related_name="ballots", on_delete=models.PROTECT
     )
@@ -60,6 +83,24 @@ class ElectionBallot(CommonIdentifiersMixin, CivicBaseModel):
     registration_deadline = models.DateField(null=True, blank=True)
     poll_closing_time = models.DateTimeField(null=True, blank=True)
     registration_notes = models.TextField(blank=True, null=True)
+
+    who_can_vote = models.SlugField(
+        max_length=50, choices=WHO_CAN_VOTE_CHOICES, blank=True, null=True
+    )
+    voters_register_by_party = models.BooleanField(blank=True, null=True)
+    party_reaffiliation_deadline_independent_voters = models.DateField(
+        blank=True, null=True
+    )
+    party_reaffiliation_deadline_other_party_voters = models.DateField(
+        blank=True, null=True
+    )
+
+    voting_reaffiliates_automatically = models.SlugField(
+        max_length=50,
+        choices=PARTY_REAFFILIATION_EFFECT_CHOICES,
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         unique_together = ("election_event", "party")

@@ -74,6 +74,18 @@ class ElectionBallotAdmin(admin.ModelAdmin):
                 )
             },
         ),
+        (
+            "Primary openness",
+            {
+                "fields": (
+                    "who_can_vote",
+                    "voters_register_by_party",
+                    "party_reaffiliation_deadline_independent_voters",
+                    "party_reaffiliation_deadline_other_party_voters",
+                    "voting_reaffiliates_automatically",
+                )
+            },
+        ),
         ("Election day information", {"fields": ("poll_closing_time",)}),
         ("Record locators", {"fields": ("uid", "slug")}),
     )
