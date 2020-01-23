@@ -21,4 +21,14 @@ class ElectionBallotAPISerializer(CommandLineListSerializer):
 
     class Meta(CommandLineListSerializer.Meta):
         model = ElectionBallot
-        fields = ("party", "offices_elected", "registration_deadline", "notes")
+        fields = (
+            "party",
+            "offices_elected",
+            "registration_deadline",
+            "who_can_vote",
+            "voters_register_by_party",
+            "party_reaffiliation_deadline_independent_voters",
+            "party_reaffiliation_deadline_other_party_voters",
+            "voting_reaffiliates_automatically",
+            "notes",
+        )
