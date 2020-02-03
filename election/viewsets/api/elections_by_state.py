@@ -12,6 +12,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 # Imports from elections.
 from election.models import ElectionBallot
 from election.models import ElectionCycle
+from election.models import ElectionDataURL
 from election.models import ElectionEvent
 from election.models import ElectionType
 from election.serializers.api import StatewiseElectionAPISerializer
@@ -105,7 +106,21 @@ class StatewiseElectionsViewSet(ReadOnlyModelViewSet):
                             queryset=ElectionBallot.objects.select_related(
                                 "party"
                             ).order_by("party__ap_code"),
-                        )
+                        ),
+                        Prefetch(
+                            "data_urls",
+                            queryset=ElectionDataURL.objects.filter(
+                                url_type=ElectionDataURL.METADATA_URL_TYPE
+                            ),
+                            to_attr="metadata_urls",
+                        ),
+                        Prefetch(
+                            "data_urls",
+                            queryset=ElectionDataURL.objects.filter(
+                                url_type=ElectionDataURL.POLLED_URL_TYPE
+                            ),
+                            to_attr="polled_urls",
+                        ),
                     )
                     .select_related("election_day", "election_type")
                     .order_by("election_day__date", "election_type__slug"),

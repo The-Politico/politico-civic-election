@@ -3,16 +3,28 @@ from django.contrib import admin
 
 
 # Imports from election.
+from election.models.election_data_url import ElectionDataURL
 from election.models.election_type import ElectionType
 
 
 PRIMARY_TYPE = ElectionType.PARTISAN_PRIMARY
 
 
+class ElectionDataURLInline(admin.TabularInline):
+    model = ElectionDataURL
+
+
 class ElectionEventAdmin(admin.ModelAdmin):
     list_display = ("get_election_event_name", "get_date")
     list_select_related = ("division", "election_day", "election_type")
-    fields = ["division", "election_day", "election_type", "notes"]
+    fields = [
+        "division",
+        "election_day",
+        "election_type",
+        "election_mode",
+        "notes",
+    ]
+    inlines = [ElectionDataURLInline]
     search_fields = ["division__name", "election_type__slug"]
 
     def get_election_event_name(self, obj):

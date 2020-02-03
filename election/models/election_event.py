@@ -21,6 +21,16 @@ class ElectionEvent(CommonIdentifiersMixin, CivicBaseModel):
     uid_prefix = "electionevent"
     default_serializer = "election.serializers.ElectionEventSerializer"
 
+    UPCOMING_MODE = "upcoming"
+    IN_PROGRESS_MODE = "in-progress"
+    PAST_MODE = "past"
+
+    ELECTION_MODE_CHOICES = (
+        (UPCOMING_MODE, "Upcoming"),
+        (IN_PROGRESS_MODE, "In progress"),
+        # (PAST_MODE, "Past"),
+    )
+
     division = models.ForeignKey(
         Division,
         related_name="election_events",
@@ -35,6 +45,10 @@ class ElectionEvent(CommonIdentifiersMixin, CivicBaseModel):
         blank=True,
         null=True,
         on_delete=models.PROTECT,
+    )
+
+    election_mode = models.SlugField(
+        max_length=50, choices=ELECTION_MODE_CHOICES, default=UPCOMING_MODE
     )
 
     notes = models.TextField(blank=True, null=True)
