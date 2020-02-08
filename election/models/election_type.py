@@ -20,18 +20,32 @@ class ElectionType(UniqueIdentifierMixin, CivicBaseModel):
     PARTISAN_CAUCUS = "partisan-caucus"
     PARTISAN_FIREHOUSE_CAUCUS = "partisan-firehouse-caucus"
     PARTISAN_PRIMARY = "partisan-primary"
-    ALL_PARTY_PRIMARY = "all-party-primary"  # Let's not say 'Jungle primary.'
     PRIMARY_RUNOFF = "primary-runoff"
     GENERAL_RUNOFF = "general-runoff"
+
+    # Top-two primaries:
+    #   - All candidates from all parties appear on the same ballot.
+    #   - The top-two finishers advance to a general election.
+    #   - These candidates can be from the same party.
+    #   - Mainly used in California and Washington.
+    TOP_TWO_PRIMARY = "top-two-primary"
+
+    # "Majority-elects" blanket primaries:
+    #   - All candidates from all parties appear on the same ballot.
+    #   - A candidate is elected outright if they win over 50%.
+    #   - Otherwise, a runoff is held between the top-two finshers.
+    #   - Mainly used in Louisiana and Mississippi.
+    MAJORITY_ELECTS_BLANKET_PRIMARY = "majority-elects-blanket-primary"
 
     TYPES = (
         (GENERAL, "General election"),
         (PARTISAN_CAUCUS, "Caucus"),
         (PARTISAN_FIREHOUSE_CAUCUS, "Firehouse Caucus"),
         (PARTISAN_PRIMARY, "Primary"),
-        (ALL_PARTY_PRIMARY, "All-party Primary"),
         (PRIMARY_RUNOFF, "Primary Runoff"),
         (GENERAL_RUNOFF, "General Runoff"),
+        (TOP_TWO_PRIMARY, "Top-two Primary"),
+        (MAJORITY_ELECTS_BLANKET_PRIMARY, "Majority-elects blanket primary"),
     )
 
     slug = models.SlugField(
@@ -54,15 +68,32 @@ class ElectionType(UniqueIdentifierMixin, CivicBaseModel):
         """
         **uid field/identifier**: :code:`electiontype:{slug}`
         """
+        if not self.label and self.slug != "":
+            type_dict = dict(self.TYPES)
+            if self.slug in type_dict:
+                self.label = type_dict[self.slug]
+
         self.generate_unique_identifier(always_overwrite_uid=True)
 
         super(ElectionType, self).save(*args, **kwargs)
+
+    def is_partisan_primary(self):
+        if self.slug in [
+            self.PARTISAN_PRIMARY,
+            self.PARTISAN_CAUCUS,
+            # self.TOP_TWO_PRIMARY,
+            # self.MAJORITY_ELECTS_BLANKET_PRIMARY,
+        ]:
+            return True
+        else:
+            return False
 
     def is_primary(self):
         if self.slug in [
             self.PARTISAN_PRIMARY,
             self.PARTISAN_CAUCUS,
-            self.ALL_PARTY_PRIMARY,
+            self.TOP_TWO_PRIMARY,
+            self.MAJORITY_ELECTS_BLANKET_PRIMARY,
         ]:
             return True
         else:

@@ -37,7 +37,8 @@ class StatewiseElectionsViewSet(ReadOnlyModelViewSet):
             ElectionType.PARTISAN_CAUCUS,
             ElectionType.PARTISAN_FIREHOUSE_CAUCUS,
             ElectionType.PARTISAN_PRIMARY,
-            ElectionType.ALL_PARTY_PRIMARY,
+            ElectionType.TOP_TWO_PRIMARY,
+            ElectionType.MAJORITY_ELECTS_BLANKET_PRIMARY,
         ],
         GENERAL_ELECTIONS_CHOICE: [ElectionType.GENERAL],
     }

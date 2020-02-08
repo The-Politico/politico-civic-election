@@ -91,15 +91,9 @@ class ElectionBallotAdmin(admin.ModelAdmin):
     )
 
     def get_election_event_name(self, obj):
-        if obj.election_event.election_type.slug == PRIMARY_TYPE:
-            if not obj.election_event.division:
-                return "Unbound Primary"
-
-            return f"{obj.election_event.division.label} Primary"
-
         return " ".join(
             [
-                f"{obj.election_event.division.label}",
+                f"{obj.election_event.division_label}",
                 f"{obj.election_event.election_type.get_slug_display()}",
             ]
         )

@@ -85,26 +85,24 @@ class ElectionEvent(CommonIdentifiersMixin, CivicBaseModel):
 
         return "__".join(
             [
-                "division:democrats abroad",
+                "division:unknown",
                 f"{self.election_day.uid}",
                 f"{self.uid_prefix}",
             ]
         )
 
     @property
-    def label(self):
+    def division_label(self):
         if self.division:
-            return " ".join(
-                [
-                    f"{self.division.label}",
-                    f"{self.election_type.get_slug_display()}",
-                    f"({self.election_day.date.strftime('%Y-%m-%d')})",
-                ]
-            )
+            return self.division.label
+        else:
+            return "[Unknown area]"
 
+    @property
+    def label(self):
         return " ".join(
             [
-                f"Unbound area",
+                f"{self.division_label}",
                 f"{self.election_type.get_slug_display()}",
                 f"({self.election_day.date.strftime('%Y-%m-%d')})",
             ]

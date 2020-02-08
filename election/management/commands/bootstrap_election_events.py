@@ -67,15 +67,27 @@ class Command(BaseCommand):
         print("    Done!")
         print("")
 
-        all_party_primaries = [
+        top_two_primaries = [
             primary_elex
             for primary_elex in election_year.elections.primaries
             if primary_elex.election_variant == "primary"
-            and primary_elex.election_openness == "all-party"
+            and primary_elex.election_openness == "top-two"
         ]
-        print("  - Creating all-party primaries...")
-        for elex_data in tqdm(all_party_primaries):
-            self.create_all_party_primary(elex_data)
+        print("  - Creating top-two primaries...")
+        for elex_data in tqdm(top_two_primaries):
+            self.create_top_two_primary(elex_data)
+        print("    Done!")
+        print("")
+
+        majority_elects_blanket_primaries = [
+            primary_elex
+            for primary_elex in election_year.elections.primaries
+            if primary_elex.election_variant == "primary"
+            and primary_elex.election_openness == "majority-elects-blanket"
+        ]
+        print("  - Creating 'majority-elects' blanket primaries...")
+        for elex_data in tqdm(majority_elects_blanket_primaries):
+            self.create_majority_elects_blanket_primary(elex_data)
         print("    Done!")
         print("")
 
@@ -104,10 +116,17 @@ class Command(BaseCommand):
                 short_label="Primary",
                 slug=ElectionType.PARTISAN_PRIMARY,
             )[0],
-            "ALL_PARTY": ElectionType.objects.get_or_create(
-                label=dict(ElectionType.TYPES)[ElectionType.ALL_PARTY_PRIMARY],
-                short_label="All-party",
-                slug=ElectionType.ALL_PARTY_PRIMARY,
+            "TOP_TWO": ElectionType.objects.get_or_create(
+                label=dict(ElectionType.TYPES)[ElectionType.TOP_TWO_PRIMARY],
+                short_label="Top-two",
+                slug=ElectionType.TOP_TWO_PRIMARY,
+            )[0],
+            "MAJORITY_ELECTS_BLANKET": ElectionType.objects.get_or_create(
+                label=dict(ElectionType.TYPES)[
+                    ElectionType.MAJORITY_ELECTS_BLANKET_PRIMARY
+                ],
+                short_label="Majority-elects blanket",
+                slug=ElectionType.MAJORITY_ELECTS_BLANKET_PRIMARY,
             )[0],
             "GENERAL": ElectionType.objects.get_or_create(
                 label=dict(ElectionType.TYPES)[ElectionType.GENERAL],
@@ -154,7 +173,7 @@ class Command(BaseCommand):
             defaults=non_null_defaults,
         )
 
-    def create_all_party_primary(self, election_data):
+    def create_top_two_primary(self, election_data):
         division = Division.objects.get(
             code_components__postal=election_data.state.abbr
         )
@@ -166,7 +185,29 @@ class Command(BaseCommand):
         election_event, evt_was_created = ElectionEvent.objects.get_or_create(
             division=division,
             election_day=election_day,
-            election_type=self.election_types["ALL_PARTY"],
+            election_type=self.election_types["TOP_TWO"],
+            defaults=dict(notes=election_data.election_day_notes),
+        )
+
+        non_null_defaults = load_election_metadata(election_data)
+
+        election_blt, blt_was_created = ElectionBallot.objects.get_or_create(
+            election_event=election_event, defaults=non_null_defaults
+        )
+
+    def create_majority_elects_blanket_primary(self, election_data):
+        division = Division.objects.get(
+            code_components__postal=election_data.state.abbr
+        )
+
+        election_day, day_was_created = ElectionDay.objects.get_or_create(
+            cycle=self.cycle, date=election_data.election_date
+        )
+
+        election_event, evt_was_created = ElectionEvent.objects.get_or_create(
+            division=division,
+            election_day=election_day,
+            election_type=self.election_types["MAJORITY_ELECTS_BLANKET"],
             defaults=dict(notes=election_data.election_day_notes),
         )
 

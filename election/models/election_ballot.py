@@ -110,17 +110,24 @@ class ElectionBallot(CommonIdentifiersMixin, CivicBaseModel):
             "%Y-%m-%d"
         )
 
-        if self.election_event.division is None:
-            return "ASDF 9989"
-
         if (
             self.party
             and self.offices_elected == self.PRESIDENTIAL_OFFICE
-            and self.election_event.election_type.slug == PRIMARY_TYPE
+            and self.election_event.election_type.is_partisan_primary()
         ):
+            event_type_slug = self.election_event.election_type.slug
+
+            if event_type_slug == ElectionType.PARTISAN_CAUCUS:
+                return " ".join(
+                    [
+                        f"{self.election_event.division_label}",
+                        f"{self.get_party_possessive()} Presidential Caucus",
+                        f"({formatted_elex_date})",
+                    ]
+                )
             return " ".join(
                 [
-                    f"{self.election_event.division.label}",
+                    f"{self.election_event.division_label}",
                     f"{self.get_party_possessive()} Presidential Primary",
                     f"({formatted_elex_date})",
                 ]
@@ -128,11 +135,11 @@ class ElectionBallot(CommonIdentifiersMixin, CivicBaseModel):
         elif (
             self.party
             and self.offices_elected == self.ALL_OFFICES
-            and self.election_event.election_type.slug == PRIMARY_TYPE
+            and self.election_event.election_type.is_partisan_primary()
         ):
             return " ".join(
                 [
-                    f"{self.election_event.division.label}",
+                    f"{self.election_event.division_label}",
                     f"{self.get_party_possessive()}",
                     "Presidential, Congressional & Statewide Primaries",
                     f"({formatted_elex_date})",
@@ -140,17 +147,17 @@ class ElectionBallot(CommonIdentifiersMixin, CivicBaseModel):
             )
         elif (
             self.party
-            and self.election_event.election_type.slug == PRIMARY_TYPE
+            and self.election_event.election_type.is_partisan_primary()
         ):
             return " ".join(
                 [
-                    f"{self.election_event.division.label}",
+                    f"{self.election_event.division_label}",
                     f"{self.get_party_possessive()} Primary",
                     f"({formatted_elex_date})",
                 ]
             )
 
-        return f"{self.election_event.label} -- open ballot"
+        return f"{self.election_event.label} -- universal ballot"
 
     def save(self, *args, **kwargs):
         """

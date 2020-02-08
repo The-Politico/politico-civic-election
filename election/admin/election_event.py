@@ -28,15 +28,9 @@ class ElectionEventAdmin(admin.ModelAdmin):
     search_fields = ["division__name", "election_type__slug"]
 
     def get_election_event_name(self, obj):
-        if obj.election_type.slug == PRIMARY_TYPE:
-            if not obj.division:
-                return "Unbound Primary"
-
-            return f"{obj.division.label} Primary"
-
         return " ".join(
             [
-                f"{obj.division.label}",
+                f"{obj.division_label}",
                 f"{obj.election_type.get_slug_display()}",
             ]
         )
