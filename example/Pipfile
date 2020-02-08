@@ -21,7 +21,7 @@ djangorestframework = "*"
 "politico-civic-geography" = "~=1.0a1.dev5"
 "politico-civic-government" = "~=1.0a1.dev4"
 "election" = {path = "./..", editable = true}
-"us-elections" = "~=0.4.2"
+"us-elections" = "~=0.4.4"
 
 [dev-packages]
 django-debug-toolbar = "*"
