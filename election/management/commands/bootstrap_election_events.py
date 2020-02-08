@@ -70,8 +70,7 @@ class Command(BaseCommand):
         top_two_primaries = [
             primary_elex
             for primary_elex in election_year.elections.primaries
-            if primary_elex.election_variant == "primary"
-            and primary_elex.election_openness == "top-two"
+            if primary_elex.election_variant == "top-two-primary"
         ]
         print("  - Creating top-two primaries...")
         for elex_data in tqdm(top_two_primaries):
@@ -79,11 +78,11 @@ class Command(BaseCommand):
         print("    Done!")
         print("")
 
+        majority_elects_slug = "majority-elects-blanket-primary"
         majority_elects_blanket_primaries = [
             primary_elex
             for primary_elex in election_year.elections.primaries
-            if primary_elex.election_variant == "primary"
-            and primary_elex.election_openness == "majority-elects-blanket"
+            if primary_elex.election_variant == majority_elects_slug
         ]
         print("  - Creating 'majority-elects' blanket primaries...")
         for elex_data in tqdm(majority_elects_blanket_primaries):
