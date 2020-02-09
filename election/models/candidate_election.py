@@ -29,6 +29,9 @@ class CandidateElection(UniqueIdentifierMixin, UUIDMixin, CivicBaseModel):
         on_delete=models.CASCADE,
         related_name="candidate_elections",
     )
+    ap_candidate_number = models.CharField(
+        "AP candidate number", max_length=255, blank=True, null=True
+    )
     aggregable = models.BooleanField(default=True)
     uncontested = models.BooleanField(default=False)
 
@@ -45,7 +48,7 @@ class CandidateElection(UniqueIdentifierMixin, UUIDMixin, CivicBaseModel):
         super(CandidateElection, self).save(*args, **kwargs)
 
     def get_uid_prefix(self):
-        return "{self.candidate.uid}__{self.uid_prefix}"
+        return f"{self.candidate.uid}__{self.uid_prefix}"
 
     def get_uid_base_field(self):
         return self.election.get_uid_base_field()
