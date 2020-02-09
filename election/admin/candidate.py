@@ -53,7 +53,16 @@ class CandidateAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             "Relationships",
-            {"fields": ("person", "party", "race", "top_of_ticket")},
+            {
+                "fields": (
+                    "person",
+                    "party",
+                    "race",
+                    "cycle",
+                    "office",
+                    "top_of_ticket",
+                )
+            },
         ),
         (
             "Identification",

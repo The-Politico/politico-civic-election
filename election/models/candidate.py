@@ -20,8 +20,8 @@ class Candidate(UniqueIdentifierMixin, UUIDMixin, CivicBaseModel):
     A person who runs in a race for an office.
     """
 
-    natural_key_fields = ["person", "race", "party"]
-    uid_prefix = "candidate"
+    natural_key_fields = ["cycle", "office", "person", "party"]
+    uid_prefix = "person"
     default_serializer = "election.serializers.CandidateSerializer"
 
     race = models.ForeignKey(
@@ -63,7 +63,7 @@ class Candidate(UniqueIdentifierMixin, UUIDMixin, CivicBaseModel):
     )
 
     class Meta:
-        unique_together = ("person", "race", "party")
+        unique_together = ("cycle", "office", "person", "party")
 
     def __str__(self):
         return self.uid
@@ -122,7 +122,10 @@ class Candidate(UniqueIdentifierMixin, UUIDMixin, CivicBaseModel):
         return delegates
 
     def get_uid_prefix(self):
-        return f"{self.person.uid}__{self.uid_prefix}"
+        cycle_uid = "cycle:"
+        office_uid = f"office:{self.office.slug}" if self.office else "office:"
+
+        return f"{cycle_uid}__{office_uid}__{self.uid_prefix}"
 
     def get_uid_base_field(self):
-        return f"{self.party.slug}-{self.race.cycle.slug}"
+        return self.person.uid
