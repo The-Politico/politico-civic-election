@@ -7,6 +7,7 @@ from civic_utils.models import CivicBaseModel
 from civic_utils.models import UniqueIdentifierMixin
 from civic_utils.models import UUIDMixin
 from entity.models import Person
+from government.models import Office
 from government.models import Party
 
 
@@ -26,6 +27,21 @@ class Candidate(UniqueIdentifierMixin, UUIDMixin, CivicBaseModel):
     race = models.ForeignKey(
         "Race", related_name="candidates", on_delete=models.PROTECT
     )
+    office = models.ForeignKey(
+        Office,
+        blank=True,
+        null=True,
+        related_name="candidates",
+        on_delete=models.PROTECT,
+    )
+    cycle = models.ForeignKey(
+        "ElectionCycle",
+        blank=True,
+        null=True,
+        related_name="candidates",
+        on_delete=models.PROTECT,
+    )
+
     person = models.ForeignKey(
         Person, related_name="candidacies", on_delete=models.PROTECT
     )
