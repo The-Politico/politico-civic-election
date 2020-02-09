@@ -99,38 +99,56 @@ class Command(BaseCommand):
     def get_needed_election_types(self):
         self.election_types = {
             "CAUCUS": ElectionType.objects.get_or_create(
-                label=dict(ElectionType.TYPES)[ElectionType.PARTISAN_CAUCUS],
-                short_label="Caucus",
                 slug=ElectionType.PARTISAN_CAUCUS,
+                defaults=dict(
+                    label=dict(ElectionType.TYPES)[
+                        ElectionType.PARTISAN_CAUCUS
+                    ],
+                    short_label="Caucus",
+                ),
             )[0],
             "FIREHOUSE_CAUCUS": ElectionType.objects.get_or_create(
-                label=dict(ElectionType.TYPES)[
-                    ElectionType.PARTISAN_FIREHOUSE_CAUCUS
-                ],
-                short_label="Firehouse Caucus",
                 slug=ElectionType.PARTISAN_FIREHOUSE_CAUCUS,
+                defaults=dict(
+                    label=dict(ElectionType.TYPES)[
+                        ElectionType.PARTISAN_FIREHOUSE_CAUCUS
+                    ],
+                    short_label="Firehouse Caucus",
+                ),
             )[0],
             "PRIMARY": ElectionType.objects.get_or_create(
-                label=dict(ElectionType.TYPES)[ElectionType.PARTISAN_PRIMARY],
-                short_label="Primary",
                 slug=ElectionType.PARTISAN_PRIMARY,
+                defaults=dict(
+                    label=dict(ElectionType.TYPES)[
+                        ElectionType.PARTISAN_PRIMARY
+                    ],
+                    short_label="Primary",
+                ),
             )[0],
             "TOP_TWO": ElectionType.objects.get_or_create(
-                label=dict(ElectionType.TYPES)[ElectionType.TOP_TWO_PRIMARY],
-                short_label="Top-two",
                 slug=ElectionType.TOP_TWO_PRIMARY,
+                defaults=dict(
+                    label=dict(ElectionType.TYPES)[
+                        ElectionType.TOP_TWO_PRIMARY
+                    ],
+                    short_label="Top-two",
+                ),
             )[0],
             "MAJORITY_ELECTS_BLANKET": ElectionType.objects.get_or_create(
-                label=dict(ElectionType.TYPES)[
-                    ElectionType.MAJORITY_ELECTS_BLANKET_PRIMARY
-                ],
-                short_label="Majority-elects blanket",
                 slug=ElectionType.MAJORITY_ELECTS_BLANKET_PRIMARY,
+                defaults=dict(
+                    label=dict(ElectionType.TYPES)[
+                        ElectionType.MAJORITY_ELECTS_BLANKET_PRIMARY
+                    ],
+                    short_label="Majority-elects blanket",
+                ),
             )[0],
             "GENERAL": ElectionType.objects.get_or_create(
-                label=dict(ElectionType.TYPES)[ElectionType.GENERAL],
-                short_label="General",
                 slug=ElectionType.GENERAL,
+                defaults=dict(
+                    label=dict(ElectionType.TYPES)[ElectionType.GENERAL],
+                    short_label="General",
+                ),
             )[0],
         }
 
