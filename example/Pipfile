@@ -19,7 +19,7 @@ djangorestframework = "*"
 "politico-civic-utils" = "~=1.0a1.dev11"
 "politico-civic-entity" = "~=1.0a1.dev2"
 "politico-civic-geography" = "~=1.0a1.dev5"
-"politico-civic-government" = "~=1.0a1.dev4"
+"politico-civic-government" = "~=1.0a1.dev5"
 "election" = {path = "./..", editable = true}
 "us-elections" = "~=0.4.4"
 

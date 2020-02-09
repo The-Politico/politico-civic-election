@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "2aef64ed32da34e3dc60f850fcadd7a932edbb27a23f85017cb6c7177462abe0"
+            "sha256": "47b5212158f8c39fb20d96ed831aa393bbe5d62afd3e2c6154db617de616049f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -221,11 +221,11 @@
         },
         "politico-civic-government": {
             "hashes": [
-                "sha256:6fac58a946a8f2f94e58a888929dc67b4a6b7472293d82e0cabf8cd19234fbe9",
-                "sha256:7910b3f983efa2859698c3324bfc6bd3c0acc5b2fbde3b0d094d9f2aff57495d"
+                "sha256:19c9cbe461906e0da40a8ba1fbd470302250b63568517f89f265c4be7b6697df",
+                "sha256:1bcfa21aae92d5eeca892e3a43649d1b5cc2347c9750b42c60b214f9c80707b2"
             ],
             "index": "pypi",
-            "version": "==1.0a1.dev4"
+            "version": "==1.0a1.dev5"
         },
         "politico-civic-utils": {
             "hashes": [
