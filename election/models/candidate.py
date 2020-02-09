@@ -37,7 +37,9 @@ class Candidate(UniqueIdentifierMixin, UUIDMixin, CivicBaseModel):
     party = models.ForeignKey(
         Party, related_name="candidates", on_delete=models.PROTECT
     )
-    ap_candidate_id = models.CharField(max_length=255, null=True, blank=True)
+    ap_candidate_id = models.CharField(
+        "AP candidate ID", max_length=255, null=True, blank=True
+    )
     incumbent = models.BooleanField(default=False)
     top_of_ticket = models.ForeignKey(
         "self",

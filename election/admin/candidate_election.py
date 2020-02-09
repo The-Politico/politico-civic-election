@@ -25,6 +25,20 @@ class CandidateElectionAdminForm(forms.ModelForm):
 
 
 class CandidateElectionAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (
+            "Relationships",
+            {
+                "fields": (
+                    "candidate",
+                    "election",
+                    ("aggregable", "uncontested"),
+                )
+            },
+        ),
+        ("Identification", {"fields": ("ap_candidate_number",)}),
+        ("Record locators", {"fields": ("uid",)}),
+    )
     form = CandidateElectionAdminForm
     list_display = ("get_candidate", "get_election")
     list_select_related = (
@@ -33,13 +47,19 @@ class CandidateElectionAdmin(admin.ModelAdmin):
         "election",
         "election__race",
     )
-    search_fields = ("candidate__person__name", "election__race__label")
+    readonly_fields = ("uid",)
+    search_fields = ("candidate__person__full_name", "election__race__label")
 
     def get_candidate(self, obj):
         return obj.candidate.person.full_name
 
+    get_candidate.short_description = "Candidate"
+    get_candidate.admin_order_field = "candidate__person__last_name"
+
     def get_election(self, obj):
         return obj.election.race.label
 
-    get_candidate.short_description = "Candidate"
     get_election.short_description = "Election"
+    get_election.admin_order_field = (
+        "election__election_ballot__election_event__election_day__date"
+    )

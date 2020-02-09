@@ -1,3 +1,3 @@
-__version__ = (1, "0a4", "dev2")
+__version__ = (1, "0a5", "dev1")
 
 default_app_config = "election.apps.ElectionConfig"
