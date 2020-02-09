@@ -24,22 +24,11 @@ class Candidate(UniqueIdentifierMixin, UUIDMixin, CivicBaseModel):
     uid_prefix = "person"
     default_serializer = "election.serializers.CandidateSerializer"
 
-    race = models.ForeignKey(
-        "Race", related_name="candidates", on_delete=models.PROTECT
-    )
     office = models.ForeignKey(
-        Office,
-        blank=True,
-        null=True,
-        related_name="candidates",
-        on_delete=models.PROTECT,
+        Office, related_name="candidates", on_delete=models.PROTECT
     )
     cycle = models.ForeignKey(
-        "ElectionCycle",
-        blank=True,
-        null=True,
-        related_name="candidates",
-        on_delete=models.PROTECT,
+        "ElectionCycle", related_name="candidates", on_delete=models.PROTECT
     )
 
     person = models.ForeignKey(
@@ -122,10 +111,10 @@ class Candidate(UniqueIdentifierMixin, UUIDMixin, CivicBaseModel):
         return delegates
 
     def get_uid_prefix(self):
-        cycle_uid = "cycle:"
+        cycle_uid = self.cycle.uid if self.cycle else "cycle:"
         office_uid = f"office:{self.office.slug}" if self.office else "office:"
 
         return f"{cycle_uid}__{office_uid}__{self.uid_prefix}"
 
     def get_uid_base_field(self):
-        return self.person.uid
+        return self.person.slug
