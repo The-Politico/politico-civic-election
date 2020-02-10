@@ -65,6 +65,7 @@ class ElectionAdmin(admin.ModelAdmin):
                     "race",
                     "ap_election_id",
                     "race_type_slug",
+                    "national_delegates_awarded",
                 )
             },
         ),
