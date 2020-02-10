@@ -59,7 +59,14 @@ class ElectionAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             "Relationships",
-            {"fields": ("election_ballot", "race", "ap_election_id")},
+            {
+                "fields": (
+                    "election_ballot",
+                    "race",
+                    "ap_election_id",
+                    "race_type_slug",
+                )
+            },
         ),
         ("Record locators", {"fields": ("uid",)}),
     )
