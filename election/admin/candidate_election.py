@@ -32,6 +32,7 @@ class CandidateElectionAdmin(admin.ModelAdmin):
                 "fields": (
                     "candidate",
                     "election",
+                    "ballot_order",
                     ("aggregable", "uncontested"),
                 )
             },
@@ -40,7 +41,7 @@ class CandidateElectionAdmin(admin.ModelAdmin):
         ("Record locators", {"fields": ("uid",)}),
     )
     form = CandidateElectionAdminForm
-    list_display = ("get_candidate", "get_election")
+    list_display = ("get_candidate", "get_election", "ballot_order")
     list_select_related = (
         "candidate",
         "candidate__person",

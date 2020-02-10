@@ -32,6 +32,7 @@ class CandidateElection(UniqueIdentifierMixin, UUIDMixin, CivicBaseModel):
     ap_candidate_number = models.CharField(
         "AP candidate number", max_length=255, blank=True, null=True
     )
+    ballot_order = models.PositiveSmallIntegerField(blank=True, null=True)
     aggregable = models.BooleanField(default=True)
     uncontested = models.BooleanField(default=False)
 
