@@ -10,6 +10,7 @@ from geography.models import Division
 
 # Imports from election.
 from election.models import CandidateElection
+from election.models.election_type import ElectionType
 
 
 class Election(UniqueIdentifierMixin, CivicBaseModel):
@@ -62,6 +63,46 @@ class Election(UniqueIdentifierMixin, CivicBaseModel):
             )
 
         return self.election_ballot.election_event.election_day.slug
+
+    @property
+    def race_type_slug(self):
+        election_type = self.election_ballot.election_event.election_type
+
+        if self.race.special:
+            if election_type.is_partisan_primary():
+                if self.election_ballot.party.ap_code == "Dem":
+                    return "dem"
+
+                if self.election_ballot.party.ap_code == "GOP":
+                    return "gop"
+
+            if election_type.slug == ElectionType.GENERAL:
+                return "specialGeneral"
+
+        if election_type.slug == ElectionType.PARTISAN_PRIMARY:
+            if self.election_ballot.party.ap_code == "Dem":
+                return "demPrimary"
+
+            if self.election_ballot.party.ap_code == "GOP":
+                return "gopPrimary"
+
+        if election_type.slug == ElectionType.PARTISAN_CAUCUS:
+            if self.election_ballot.party.ap_code == "Dem":
+                return "demCaucusDelegates"
+
+            if self.election_ballot.party.ap_code == "GOP":
+                return "gopCaucus"
+
+        if election_type.slug == ElectionType.TOP_TWO_PRIMARY:
+            return "topTwoPrimary"
+
+        if election_type.slug == ElectionType.MAJORITY_ELECTS_BLANKET_PRIMARY:
+            return "majorityElectsBlanketPrimary"
+
+        if election_type.slug == ElectionType.GENERAL:
+            return "general"
+
+        return None
 
     def update_or_create_candidate(
         self, candidate, aggregable=True, uncontested=False
