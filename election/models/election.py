@@ -38,6 +38,11 @@ class Election(UniqueIdentifierMixin, CivicBaseModel):
     )
     ap_election_id = models.CharField(max_length=10, blank=True, null=True)
     race_type_slug = models.SlugField(max_length=50, blank=True, null=True)
+    national_delegates_awarded = models.PositiveSmallIntegerField(
+        blank=True,
+        null=True,
+        help_text="Generally, only used for the presidency.",
+    )
 
     def __str__(self):
         return self.race.office.label
