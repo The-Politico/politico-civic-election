@@ -28,7 +28,7 @@ class ElectionEvent(CommonIdentifiersMixin, CivicBaseModel):
     ELECTION_MODE_CHOICES = (
         (UPCOMING_MODE, "Upcoming"),
         (IN_PROGRESS_MODE, "In progress"),
-        # (PAST_MODE, "Past"),
+        (PAST_MODE, "Past"),
     )
 
     division = models.ForeignKey(
