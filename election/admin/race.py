@@ -34,7 +34,15 @@ class RaceAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             "Names and labeling",
-            {"fields": ("label", "short_label", "special", "description")},
+            {
+                "fields": (
+                    "label",
+                    "short_label",
+                    "special",
+                    "description",
+                    "division_description",
+                )
+            },
         ),
         ("Relationships", {"fields": ("office", "cycle", "division")}),
         ("Record locators", {"fields": ("uid", "slug")}),

@@ -55,6 +55,9 @@ class Race(CommonIdentifiersMixin, CivicBaseModel):
         null=True,
         help_text="Generally, only used for the presidency.",
     )
+    division_description = models.CharField(
+        max_length=150, blank=True, null=True
+    )
     electoral_votes = models.IntegerField(
         blank=True,
         null=True,
