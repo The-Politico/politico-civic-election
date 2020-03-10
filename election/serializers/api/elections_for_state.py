@@ -13,6 +13,9 @@ class StatewiseElectionAPISerializer(CommandLineListSerializer):
     elections = serializers.SerializerMethodField()
 
     def get_fips(self, obj):
+        if obj.code_components is None:
+            return None
+
         return obj.code_components.get("fips", {"state": "-"}).get("state")
 
     def get_elections(self, obj):
