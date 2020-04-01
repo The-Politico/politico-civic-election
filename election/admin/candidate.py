@@ -63,7 +63,7 @@ class PartyFilter(admin.SimpleListFilter):
 class CandidateAdmin(admin.ModelAdmin):
     list_display = ("get_person", "get_cycle", "get_office", "get_party")
     list_filter = (CycleFilter, JurisdictionFilter, PartyFilter)
-    list_select_related = ("party", "person")
+    list_select_related = ("cycle", "office", "party", "person")
     readonly_fields = ("uid",)
     search_fields = ("person__full_name",)
 

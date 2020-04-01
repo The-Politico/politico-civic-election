@@ -20,8 +20,12 @@ class CustomModelChoiceField(forms.ModelChoiceField):
 
 
 class CandidateElectionAdminForm(forms.ModelForm):
-    candidate = CustomModelChoiceField(queryset=Candidate.objects.all())
-    election = CustomModelChoiceField(queryset=Election.objects.all())
+    candidate = CustomModelChoiceField(
+        queryset=Candidate.objects.all().select_related("person")
+    )
+    election = CustomModelChoiceField(
+        queryset=Election.objects.all().select_related("race")
+    )
 
 
 class CandidateElectionAdmin(admin.ModelAdmin):

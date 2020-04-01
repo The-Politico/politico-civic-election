@@ -3,8 +3,7 @@ from django.contrib import admin
 
 
 # Imports from election.
-# from election.models import CandidateElection
-# from election.models import ElectionDay
+from election.admin.utils import customTitledFilter
 from election.models.election_type import ElectionType
 
 
@@ -15,9 +14,22 @@ class ElectionBallotAdmin(admin.ModelAdmin):
     autocomplete_fields = ["election_event"]
     list_display = (
         "get_election_event_name",
-        "get_party_name",
-        "get_election_event_date",
-        "offices_elected",
+        "get_election_date",
+        "get_election_type",
+        "get_party",
+        "get_offices_elected",
+    )
+    list_filter = (
+        (
+            "election_event__election_day__date",
+            customTitledFilter("election date"),
+        ),
+        (
+            "election_event__election_type__label",
+            customTitledFilter("election type"),
+        ),
+        ("party__label", customTitledFilter("party")),
+        ("offices_elected", customTitledFilter("offices being elected")),
     )
     list_select_related = (
         "election_event",
@@ -31,7 +43,21 @@ class ElectionBallotAdmin(admin.ModelAdmin):
         # "race",
         # "race__office",
     )
+    ordering = [
+        "election_event__election_day__date",
+        "election_event__division__slug",
+        "election_event__election_type__label",
+        "party__label",
+    ]
     readonly_fields = ("uid", "slug")
+    search_fields = (
+        "election_event__division__name",
+        "election_event__election_day__date",
+        "election_event__election_day__slug",
+        "election_event__election_type__slug",
+        "election_event__notes",
+        "overall_notes",
+    )
 
     fieldsets = (
         (
@@ -90,6 +116,19 @@ class ElectionBallotAdmin(admin.ModelAdmin):
         ("Record locators", {"fields": ("uid", "slug")}),
     )
 
+    def get_queryset(self, request):
+        return (
+            super(ElectionBallotAdmin, self)
+            .get_queryset(request)
+            .select_related(
+                "election_event",
+                "election_event__division",
+                "election_event__election_day",
+                "election_event__election_type",
+                "party",
+            )
+        )
+
     def get_election_event_name(self, obj):
         return " ".join(
             [
@@ -103,19 +142,30 @@ class ElectionBallotAdmin(admin.ModelAdmin):
         "election_event__division__slug"
     )
 
-    def get_party_name(self, obj):
+    def get_election_date(self, obj):
+        return obj.election_event.election_day.date
+
+    get_election_date.short_description = "Election date"
+    get_election_date.admin_order_field = "election_event__election_day__date"
+
+    def get_election_type(self, obj):
+        return obj.election_event.election_type.label
+
+    get_election_type.short_description = "Election Type"
+    get_election_type.admin_order_field = (
+        "election_event__election_type__label"
+    )
+
+    def get_party(self, obj):
         if obj.party:
             return obj.party.label
+        else:
+            return None
 
-        return "-"
+    get_party.short_description = "Primary Party"
+    get_party.admin_order_field = "party__label"
 
-    get_party_name.short_description = "Party"
-    get_party_name.admin_order_field = "party"
+    def get_offices_elected(self, obj):
+        return obj.offices_elected
 
-    def get_election_event_date(self, obj):
-        return obj.election_event.election_day.date.strftime("%Y-%m-%d")
-
-    get_election_event_date.short_description = "Date"
-    get_election_event_date.admin_order_field = (
-        "election_event__election_day__date"
-    )
+    get_offices_elected.short_description = "Offices being elected"
