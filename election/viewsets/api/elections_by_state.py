@@ -24,21 +24,24 @@ class StatewiseElectionsViewSet(ReadOnlyModelViewSet):
     """"""
 
     ALL_PRIMARIES_CHOICE = "all-primaries"
+    PRIMARIES_INCLUDING_RUNOFFS_CHOICE = "primaries-including-runoffs"
     GENERAL_ELECTIONS_CHOICE = "general-elections"
 
     ELECTION_TYPE_CHOICES = [
         (ALL_PRIMARIES_CHOICE, "All primaries"),
+        (
+            PRIMARIES_INCLUDING_RUNOFFS_CHOICE,
+            "Primaries, including primary runoffs",
+        ),
         (GENERAL_ELECTIONS_CHOICE, "All general elections"),
         *ElectionType.TYPES,
     ]
 
     GROUPED_ELECTION_TYPE_CROSSWALK = {
-        ALL_PRIMARIES_CHOICE: [
-            ElectionType.PARTISAN_CAUCUS,
-            ElectionType.PARTISAN_FIREHOUSE_CAUCUS,
-            ElectionType.PARTISAN_PRIMARY,
-            ElectionType.TOP_TWO_PRIMARY,
-            ElectionType.MAJORITY_ELECTS_BLANKET_PRIMARY,
+        ALL_PRIMARIES_CHOICE: ElectionType.PRIMARY_ELECTION_TYPES,
+        PRIMARIES_INCLUDING_RUNOFFS_CHOICE: [
+            *ElectionType.PRIMARY_ELECTION_TYPES,
+            ElectionType.PRIMARY_RUNOFF,
         ],
         GENERAL_ELECTIONS_CHOICE: [ElectionType.GENERAL],
     }

@@ -37,6 +37,15 @@ class ElectionType(UniqueIdentifierMixin, CivicBaseModel):
     #   - Mainly used in Louisiana and Mississippi.
     MAJORITY_ELECTS_BLANKET_PRIMARY = "majority-elects-blanket-primary"
 
+    PARTISAN_PRIMARY_ELECTION_TYPES = [PARTISAN_PRIMARY, PARTISAN_CAUCUS]
+
+    PRIMARY_ELECTION_TYPES = [
+        PARTISAN_PRIMARY,
+        PARTISAN_CAUCUS,
+        TOP_TWO_PRIMARY,
+        MAJORITY_ELECTS_BLANKET_PRIMARY,
+    ]
+
     TYPES = (
         (GENERAL, "General election"),
         (PARTISAN_CAUCUS, "Caucus"),
@@ -78,29 +87,25 @@ class ElectionType(UniqueIdentifierMixin, CivicBaseModel):
         super(ElectionType, self).save(*args, **kwargs)
 
     def is_partisan_primary(self):
-        if self.slug in [
-            self.PARTISAN_PRIMARY,
-            self.PARTISAN_CAUCUS,
-            # self.TOP_TWO_PRIMARY,
-            # self.MAJORITY_ELECTS_BLANKET_PRIMARY,
-        ]:
+        if self.slug in self.PARTISAN_PRIMARY_ELECTION_TYPES:
             return True
         else:
             return False
 
     def is_primary(self):
-        if self.slug in [
-            self.PARTISAN_PRIMARY,
-            self.PARTISAN_CAUCUS,
-            self.TOP_TWO_PRIMARY,
-            self.MAJORITY_ELECTS_BLANKET_PRIMARY,
-        ]:
+        if self.slug in self.PRIMARY_ELECTION_TYPES:
             return True
         else:
             return False
 
     def is_runoff(self):
         if self.slug in [self.PRIMARY_RUNOFF, self.GENERAL_RUNOFF]:
+            return True
+        else:
+            return False
+
+    def is_primary_runoff(self):
+        if self.slug == self.PRIMARY_RUNOFF:
             return True
         else:
             return False

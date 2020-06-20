@@ -156,6 +156,17 @@ class ElectionBallot(CommonIdentifiersMixin, CivicBaseModel):
                     f"({formatted_elex_date})",
                 ]
             )
+        elif (
+            self.party
+            and self.election_event.election_type.is_primary_runoff()
+        ):
+            return " ".join(
+                [
+                    f"{self.election_event.division_label}",
+                    f"{self.get_party_possessive()} Primary Runoff",
+                    f"({formatted_elex_date})",
+                ]
+            )
 
         return f"{self.election_event.label} -- universal ballot"
 
